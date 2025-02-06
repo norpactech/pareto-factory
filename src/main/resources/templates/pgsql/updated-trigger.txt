@@ -1,0 +1,8 @@
+-- ------------------------------------------------------------------
+-- Trigger for auto-updating the 'updated' audit column
+-- ------------------------------------------------------------------
+create trigger t_$(TABLE_NAME)_update_updated
+  before update on $(SCHEMA).$(TABLE_NAME)
+  for each row
+  execute function $(SCHEMA).update_updated();
+

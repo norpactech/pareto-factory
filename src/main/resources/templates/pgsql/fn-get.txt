@@ -1,0 +1,20 @@
+-- ------------------------------------------------------------------
+-- Get by primary key for table: $(TABLE_NAME)
+-- ------------------------------------------------------------------
+drop function if exists $(SCHEMA).g_$(TABLE_NAME);
+
+create function $(SCHEMA).g_$(TABLE_NAME)($(PRIMARY_KEY_PARAMS))
+  returns $(SCHEMA).$(TABLE_NAME)
+as $$
+  declare
+    result $(SCHEMA).$(TABLE_NAME);
+
+  begin
+    select * into result
+      from $(SCHEMA).$(TABLE_NAME)
+$(PRIMARY_KEY_SEARCH) 
+   
+    return result;
+  end;
+$$ language plpgsql;
+

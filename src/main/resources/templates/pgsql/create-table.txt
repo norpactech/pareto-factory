@@ -1,0 +1,11 @@
+-- ------------------------------------------------------------------
+-- ©2024 $(COPYRIGHT_AUTHOR). All Rights Reserved.
+-- 
+-- DDL and Functions for: $(SCHEMA).$(TABLE_NAME)
+-- ------------------------------------------------------------------
+drop table if exists $(SCHEMA).$(TABLE_NAME) cascade;
+
+create table $(SCHEMA).$(TABLE_NAME) (
+$(COLUMNS)
+);
+

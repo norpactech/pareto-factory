@@ -1,0 +1,23 @@
+-- ------------------------------------------------------------------
+-- Delete a row in table: $(TABLE_NAME)
+-- ------------------------------------------------------------------
+drop function if exists $(SCHEMA).d_$(TABLE_NAME);
+
+create function $(SCHEMA).d_$(TABLE_NAME)($(PRIMARY_KEY_PARAMS))
+  returns boolean
+as $$
+  declare
+    v_rows integer;
+
+  begin
+    delete from $(SCHEMA).$(TABLE_NAME)
+$(PRIMARY_KEY_SEARCH)    
+
+    select count(*) into v_rows
+      from $(SCHEMA).$(TABLE_NAME)
+$(PRIMARY_KEY_SEARCH)    
+
+    return v_rows = 0;
+  end;
+$$ language plpgsql;
+

@@ -1,0 +1,20 @@
+-- ------------------------------------------------------------------
+-- Get by alternate key for table: $(TABLE_NAME)
+-- ------------------------------------------------------------------
+drop function if exists $(SCHEMA).ga_$(TABLE_NAME);
+
+create function $(SCHEMA).ga_$(TABLE_NAME)($(ALT_KEY))
+  returns $(SCHEMA).$(TABLE_NAME)
+as $$  
+  declare
+    result $(SCHEMA).$(TABLE_NAME);
+    
+  begin
+    select * into result
+      from $(SCHEMA).$(TABLE_NAME)
+$(ALT_KEY_WHERE);
+
+    return result;
+  end;
+$$ language plpgsql;
+

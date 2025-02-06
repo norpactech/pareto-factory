@@ -1,0 +1,7 @@
+
+alter table $(SCHEMA).$(TABLE_NAME)
+  add constraint $(CONSTRAINT)
+  foreign key ($(COLUMN_NAME))
+  references $(SCHEMA).$(REFERENCED_TABLE) ($(REFERENCED_COLUMN))
+  on update $(UPDATE_RULE)
+  on delete $(DELETE_RULE);

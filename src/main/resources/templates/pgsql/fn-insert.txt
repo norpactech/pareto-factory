@@ -1,0 +1,28 @@
+-- ------------------------------------------------------------------
+-- Insert into table: $(TABLE_NAME)
+-- ------------------------------------------------------------------
+drop function if exists $(SCHEMA).i_$(TABLE_NAME);
+
+create function $(SCHEMA).i_$(TABLE_NAME)
+  (
+$(IN_PARAMS)
+  )
+  returns table ($(RETURNING_DEFINITIONS))
+as $$
+  declare
+$(VARIABLE_DEFINITIONS)
+    
+  begin
+    insert into $(SCHEMA).$(TABLE_NAME) (
+$(COLUMNS)
+    )
+    values (
+$(VALUES)
+    )
+    returning $(RETURNING_COLUMNS) into $(RETURNING_VALUES);
+    
+    return query select $(RETURNING_VALUES);
+    
+  end;
+$$ language plpgsql;
+

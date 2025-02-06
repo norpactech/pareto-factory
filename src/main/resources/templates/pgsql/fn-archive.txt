@@ -1,0 +1,37 @@
+-- ------------------------------------------------------------------
+-- Archive/Unarchive a row in table: $(TABLE_NAME)
+-- ------------------------------------------------------------------
+drop function if exists $(SCHEMA).a_$(TABLE_NAME);
+drop function if exists $(SCHEMA).ua_$(TABLE_NAME);
+
+create function $(SCHEMA).a_$(TABLE_NAME)($(PRIMARY_KEY_PARAMS))
+  returns boolean
+as $$  
+  declare 
+    v_archived boolean;
+
+  begin
+    update $(SCHEMA).$(TABLE_NAME)
+       set archived = true
+$(PRIMARY_KEY_SEARCH)    
+     returning archived into v_archived;
+
+     return v_archived = true;
+  end;
+$$ language plpgsql;
+
+create function $(SCHEMA).ua_$(TABLE_NAME)($(PRIMARY_KEY_PARAMS))
+  returns boolean
+as $$  
+  declare 
+    v_archived boolean;
+    
+  begin
+    update $(SCHEMA).$(TABLE_NAME)
+       set archived = false
+$(PRIMARY_KEY_SEARCH)    
+     returning archived into v_archived;
+
+     return v_archived = false;
+  end;
+$$ language plpgsql;

@@ -1,0 +1,11 @@
+-- ============================================================================
+--  ©2024 $(COPYRIGHT_AUTHOR) All Rights Reserved
+-- ============================================================================
+
+create or replace function $(SCHEMA).update_updated()
+returns trigger as $$
+begin
+    new.updated = now();
+    return new;
+end;
+$$ language plpgsql;

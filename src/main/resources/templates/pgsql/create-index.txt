@@ -1,0 +1,3 @@
+create $(UNIQUE) index $(INDEX_NAME)
+    on $(SCHEMA).$(TABLE_NAME) ($(COLUMNS));
+
