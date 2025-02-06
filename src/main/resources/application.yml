@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: fw-factory
+
+server:
+  port: ${PORT:8086}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+fw-factory:
+  app:
+    version: '@project.version@'
