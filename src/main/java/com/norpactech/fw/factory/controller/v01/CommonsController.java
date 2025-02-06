@@ -1,4 +1,4 @@
-package com.norpactech.fw.factory.controller;
+package com.norpactech.fw.factory.controller.v01;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -20,7 +20,7 @@ import com.norpactech.fw.factory.domain.AboutVO;
 import com.norpactech.fw.factory.utils.DateUtils;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/v01")
 public class CommonsController {
 	
   private static ZonedDateTime zonedDateTime = Instant.now().atZone(ZoneId.systemDefault());    
@@ -40,7 +40,7 @@ public class CommonsController {
   @GetMapping("/health")
   public Map<String, String> health() {
     Map<String, String> status = new HashMap<>();
-    status.put("Status", "OK");
+    status.put("status", "OK");
     return status;
   }
   

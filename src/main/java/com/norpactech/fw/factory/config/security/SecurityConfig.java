@@ -28,8 +28,7 @@ public class SecurityConfig {
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
     .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-        .requestMatchers("/api/health").permitAll()
-        .requestMatchers("/api/sales/qr-code").permitAll()
+        .requestMatchers("/v01/health").permitAll()
         .anyRequest().authenticated())
     .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer
         .jwt(jwt -> jwt.decoder(jwtDecoder())
@@ -45,9 +44,11 @@ public class SecurityConfig {
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
+    /*
     configuration.addAllowedOrigin("https://dev.customer.canology.cleaning");
     configuration.addAllowedOrigin("https://customer.canology.cleaning");
     configuration.addAllowedOrigin("http://localhost:3000");
+    */
     configuration.addAllowedHeader("*");
     configuration.addAllowedMethod("*");
     configuration.setAllowCredentials(true);

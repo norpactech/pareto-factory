@@ -6,6 +6,6 @@ spring:
     password: password
 
 cognito:
-  region: us-west-1 
-  pool-id: us-west-1_t095uUnru
+  region: us-west-2 
+  pool-id: us-west-2_O5NAjDcDT
 
