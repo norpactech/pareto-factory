@@ -13,6 +13,8 @@ import com.norpactech.fw.factory.service.MySqlDatabaseFactoryService;
 @RequestMapping("/mysql/v01")
 public class MySqlController implements DatabaseFactoryControllerAPI {
 
+  
+  
   @Autowired
   MySqlDatabaseFactoryService factoryService;
 
@@ -22,6 +24,7 @@ public class MySqlController implements DatabaseFactoryControllerAPI {
 
     return new DatabaseFactoryAboutVO(
       factoryService.getFactoryName(), 
-      factoryService.getFactoryVersion());
+      factoryService.getFactoryVersion(),
+      factoryService.getDatabaseSchema());
   }
 }

@@ -2,6 +2,14 @@ spring:
   application:
     name: fw-factory
 
+  jpa:
+    show-sql: false
+    generate-ddl: true
+    properties:
+      hibernate:
+        ddl-auto: update
+        multiTenancy: DATABASE
+    
 server:
   port: ${PORT:8086}
 
@@ -12,5 +20,5 @@ management:
         include: "*"
 
 fw-factory:
-  app:
-    version: '@project.version@'
+  version: '@project.version@'
+  tenant: norpac

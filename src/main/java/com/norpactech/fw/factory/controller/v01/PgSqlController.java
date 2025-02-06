@@ -22,6 +22,7 @@ public class PgSqlController implements DatabaseFactoryControllerAPI {
 
     return new DatabaseFactoryAboutVO(
       factoryService.getFactoryName(), 
-      factoryService.getFactoryVersion());
+      factoryService.getFactoryVersion(),
+      factoryService.getDatabaseSchema());
   }
 }

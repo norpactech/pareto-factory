@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.norpactech.fw.factory.config.tenant.TenantContext;
 import com.norpactech.fw.factory.domain.AboutVO;
 import com.norpactech.fw.factory.utils.DateUtils;
+
+import jakarta.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("/v01")
@@ -28,7 +31,7 @@ public class CommonsController {
   @Value("${spring.application.name}")
   private String name;
     
-  @Value("${fw-factory.app.version}")
+  @Value("${fw-factory.version}")
   private String version;
 
   @Value("${spring.profiles.active}")
@@ -37,6 +40,14 @@ public class CommonsController {
   @Autowired
   private DataSource dataSource;
   
+  @Value("${fw-factory.tenant}")
+  String defaultTenant;
+  
+  @PostConstruct
+  public void init() {
+    TenantContext.setCurrentTenant(defaultTenant);
+  }
+
   @GetMapping("/health")
   public Map<String, String> health() {
     Map<String, String> status = new HashMap<>();
