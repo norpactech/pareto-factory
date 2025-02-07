@@ -1,2 +1,2 @@
-# Pareto
-System Used to Create 'Code Factories'
+# Pareto Factory
+Application for housing Pareto Code Generators'
