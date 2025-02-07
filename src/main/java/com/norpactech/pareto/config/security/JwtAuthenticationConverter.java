@@ -1,4 +1,4 @@
-package com.norpactech.fw.factory.config.security;
+package com.norpactech.pareto.config.security;
 
 import java.util.Collection;
 

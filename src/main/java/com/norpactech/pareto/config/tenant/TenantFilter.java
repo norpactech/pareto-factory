@@ -1,4 +1,4 @@
-package com.norpactech.fw.factory.config.tenant;
+package com.norpactech.pareto.config.tenant;
 
 import java.io.IOException;
 

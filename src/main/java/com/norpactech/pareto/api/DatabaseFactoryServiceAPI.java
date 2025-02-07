@@ -1,4 +1,4 @@
-package com.norpactech.fw.factory.api;
+package com.norpactech.pareto.api;
 
 public interface DatabaseFactoryServiceAPI {
 

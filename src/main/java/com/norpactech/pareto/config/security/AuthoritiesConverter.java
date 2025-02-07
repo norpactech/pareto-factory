@@ -1,4 +1,4 @@
-package com.norpactech.fw.factory.config.security;
+package com.norpactech.pareto.config.security;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;

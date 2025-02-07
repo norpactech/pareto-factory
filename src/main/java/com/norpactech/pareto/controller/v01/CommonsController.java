@@ -1,4 +1,4 @@
-package com.norpactech.fw.factory.controller.v01;
+package com.norpactech.pareto.controller.v01;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.norpactech.fw.factory.config.tenant.TenantContext;
-import com.norpactech.fw.factory.domain.AboutVO;
-import com.norpactech.fw.factory.utils.DateUtils;
+import com.norpactech.pareto.config.tenant.TenantContext;
+import com.norpactech.pareto.domain.AboutVO;
+import com.norpactech.pareto.utils.DateUtils;
 
 import jakarta.annotation.PostConstruct;
 

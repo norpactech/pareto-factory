@@ -1,13 +1,13 @@
-package com.norpactech.fw.factory.controller.v01;
+package com.norpactech.pareto.controller.v01;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.norpactech.fw.factory.api.DatabaseFactoryControllerAPI;
-import com.norpactech.fw.factory.domain.DatabaseFactoryAboutVO;
-import com.norpactech.fw.factory.service.PgSqlDatabaseFactoryService;
+import com.norpactech.pareto.api.DatabaseFactoryControllerAPI;
+import com.norpactech.pareto.domain.DatabaseFactoryAboutVO;
+import com.norpactech.pareto.service.PgSqlDatabaseFactoryService;
 
 @RestController
 @RequestMapping("/pgsql/v01")

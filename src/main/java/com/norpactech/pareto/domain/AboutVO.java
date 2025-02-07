@@ -1,4 +1,4 @@
-package com.norpactech.fw.factory.domain;
+package com.norpactech.pareto.domain;
 
 import lombok.Data;
 

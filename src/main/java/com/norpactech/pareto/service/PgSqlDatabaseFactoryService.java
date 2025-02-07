@@ -1,10 +1,10 @@
-package com.norpactech.fw.factory.service;
+package com.norpactech.pareto.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.norpactech.fw.factory.api.DatabaseFactoryServiceAPI;
-import com.norpactech.fw.factory.repository.PgSqlDatabaseFactoryRepository;
+import com.norpactech.pareto.api.DatabaseFactoryServiceAPI;
+import com.norpactech.pareto.repository.PgSqlDatabaseFactoryRepository;
 
 @Service("PgSqlDatabaseFactoryService")
 public class PgSqlDatabaseFactoryService implements DatabaseFactoryServiceAPI {

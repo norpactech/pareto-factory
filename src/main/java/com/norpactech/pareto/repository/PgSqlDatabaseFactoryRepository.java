@@ -1,4 +1,4 @@
-package com.norpactech.fw.factory.repository;
+package com.norpactech.pareto.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
