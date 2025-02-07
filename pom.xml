@@ -10,7 +10,7 @@
 	</parent>
 	
 	<groupId>com.norpactech.fw</groupId>
-	<artifactId>factory</artifactId>
+	<artifactId>pareto-factory</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Pareto Factory</name>
 	<description>Code Generator/Factory</description>
