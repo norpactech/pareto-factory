@@ -1,2 +1,2 @@
 # Pareto
-Application Used to Create 'Code Factories'
+System Used to Create 'Code Factories'
