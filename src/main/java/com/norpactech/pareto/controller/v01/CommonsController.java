@@ -31,7 +31,7 @@ public class CommonsController {
   @Value("${spring.application.name}")
   private String name;
     
-  @Value("${fw-factory.version}")
+  @Value("${pareto-factory.version}")
   private String version;
 
   @Value("${spring.profiles.active}")
@@ -40,7 +40,7 @@ public class CommonsController {
   @Autowired
   private DataSource dataSource;
   
-  @Value("${fw-factory.tenant}")
+  @Value("${pareto-factory.tenant}")
   String defaultTenant;
   
   @PostConstruct

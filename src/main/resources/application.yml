@@ -1,6 +1,6 @@
 spring:
   application:
-    name: fw-factory
+    name: pareto-factory
 
   jpa:
     show-sql: false
@@ -19,6 +19,6 @@ management:
       exposure:
         include: "*"
 
-fw-factory:
+pareto-factory:
   version: '@project.version@'
   tenant: norpac

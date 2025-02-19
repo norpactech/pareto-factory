@@ -22,7 +22,7 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 @Configuration
 public class MultitenantConfiguration {
 
-  @Value("${fw-factory.tenant}")
+  @Value("${pareto-factory.tenant}")
   String defaultTenant;
 
   @Value("${spring.profiles.active}")
