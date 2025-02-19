@@ -1,3 +1,4 @@
+# Set as [environment]-ub in SPRING_PROFILES_ACTIVE
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver

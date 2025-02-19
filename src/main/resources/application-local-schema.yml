@@ -1,11 +1,15 @@
+# Set as [environment]-schema in SPRING_PROFILES_ACTIVE
+# Environments include: local, dev, docker, prod. See MultiTenantConfiguration.java
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/norpac?currentSchema=pareto
     username: norpac 
     password: password
-  
+
+# Match with pareto-factory.tenant for default datasource
 tenant:
-  name: norpac
+  name: schema
     
 

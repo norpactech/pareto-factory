@@ -21,7 +21,7 @@ management:
 
 pareto-factory:
   version: '@project.version@'
-  tenant: norpac
+  tenant: schema
   
 cognito:
   region: us-west-2 
