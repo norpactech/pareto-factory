@@ -22,3 +22,7 @@ management:
 pareto-factory:
   version: '@project.version@'
   tenant: norpac
+  
+cognito:
+  region: us-west-2 
+  pool-id: us-west-2_O5NAjDcDT
