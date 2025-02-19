@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/featherweight?currentSchema=public
+    url: jdbc:postgresql://localhost:5432/norpac?currentSchema=public
     username: norpac 
     password: password
 
