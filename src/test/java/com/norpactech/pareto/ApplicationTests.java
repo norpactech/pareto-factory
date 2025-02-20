@@ -1,4 +1,4 @@
-package com.norpactech.fw.factory;
+package com.norpactech.pareto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

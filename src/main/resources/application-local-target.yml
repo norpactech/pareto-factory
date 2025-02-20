@@ -2,9 +2,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/norpac?currentSchema=ub
+    url: jdbc:postgresql://localhost:5432/norpac?currentSchema=target
     username: norpac 
     password: password
     
 tenant: 
-  name: ub
+  name: target

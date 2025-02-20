@@ -10,6 +10,6 @@ spring:
 
 # Match with pareto-factory.tenant for default datasource
 tenant:
-  name: schema
+  name: system
     
 

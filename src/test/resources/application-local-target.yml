@@ -1,0 +1,10 @@
+# Set as [environment]-ub in SPRING_PROFILES_ACTIVE
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/norpac?currentSchema=target
+    username: norpac 
+    password: password
+    
+tenant: 
+  name: target
