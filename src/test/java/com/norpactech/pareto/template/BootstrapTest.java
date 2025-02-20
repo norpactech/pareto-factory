@@ -15,7 +15,7 @@ class BootstrapTest {
 	@Test
 	void generateCreate() throws Exception  {
 
-    String result = pgsqlGeneratorService.bootstrap("norpac", "system");
+    String result = pgsqlGeneratorService.bootstrap("norpac", "pareto");
 
     System.out.println(result);
 	}

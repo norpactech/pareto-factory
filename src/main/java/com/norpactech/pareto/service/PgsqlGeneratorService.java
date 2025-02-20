@@ -2,10 +2,14 @@ package com.norpactech.pareto.service;
 
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.norpactech.pareto.domain.AttributeVO;
+import com.norpactech.pareto.domain.ValidationVO;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -21,12 +25,35 @@ public class PgsqlGeneratorService {
     Template template = freemarkerConfig.getTemplate("pgsql/bootstrap.ftl");
 
     Map<String, Object> model = new HashMap<>();
-    model.put("OWNER", owner);
-    model.put("SCHEMA", schema);
+    model.put("owner", owner);
+    model.put("schema", schema);
 
     // Process template
     StringWriter writer = new StringWriter();
     template.process(model, writer);
     return writer.toString();
   }
+  
+  public String insert(
+      String schema, 
+      String object, 
+      boolean hasAudit, 
+      List<AttributeVO> attributes, 
+      List<ValidationVO> validations) throws Exception {
+
+    Template template = freemarkerConfig.getTemplate("pgsql/insert.ftl");
+
+    Map<String, Object> model = new HashMap<>();
+    model.put("schema", schema);
+    model.put("object", object);
+    model.put("hasAudit", hasAudit);
+    model.put("attributes", attributes);
+    model.put("validations", validations);
+
+    // Process template
+    StringWriter writer = new StringWriter();
+    template.process(model, writer);
+    return writer.toString();
+  }  
+  
 }
