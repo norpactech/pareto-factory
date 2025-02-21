@@ -3,32 +3,40 @@
 -- ------------------------------------------------------
 CREATE OR REPLACE FUNCTION ${schema}.i_${object}(
   <#list attributes as attribute>
-  IN in_${attribute.name} ${attribute.type}<#if attribute?has_next>, </#if>
+  IN ${attribute.name} ${attribute.type}<#if attribute?has_next || hasAudit>, </#if>
   </#list>
+  <#if hasAudit>
+  IN created_by TEXT
+  </#if>
 )
 RETURNS pg_resp
 AS $$
 DECLARE
 
-  v_val_resp   pg_val;
-  v_errors     JSONB := '[]'::JSONB;
-  v_response   pg_resp;
+  c_service_name TEXT := 'i_${object}';
 
-  v_id         uuid;
-  v_updated_at timestamptz;
-  <#if hasAudit>
-  v_updated_by text := in_created_by;
-  </#if>
+  v_val_resp     pg_val;
+  v_errors       JSONB := '[]'::JSONB;
+  v_response     pg_resp;
+  v_metadata     JSONB := '{}'::JSONB;
+
+  v_id           UUID;
+  v_updated_at   TIMESTAMPTZ;
 
 BEGIN
 
+  -- ------------------------------------------------------
+  -- Metadata
+  -- ------------------------------------------------------
+
   v_metadata := jsonb_build_object(
-    'name'       , in_name,
-    'description', in_description,
-    'is_global'  , in_is_global
+  <#list attributes as attribute>
+    '${attribute.name}', ${attribute.name}<#if attribute?has_next || hasAudit>, </#if>
+  </#list>
+  <#if hasAudit>
+    'created_by', created_by
+  </#if>    
   );
-
-
   <#if validations?has_content>
   
   -- ------------------------------------------------------
@@ -37,16 +45,16 @@ BEGIN
   
   </#if>  
   <#list validations as validation>
-  v_val_resp := is_${validation.type}('${validation.attribute}', in_${validation.attribute});
+  v_val_resp := is_${validation.name}('${validation.attribute}', ${validation.attribute});
   IF NOT v_val_resp.passed THEN
-    v_errors := v_errors || jsonb_build_object('field', v_val_resp.field, 'message', v_val_resp.message);
+    v_errors := v_errors || jsonb_build_object('type', 'validation', 'field', v_val_resp.field, 'message', v_val_resp.message);
   END IF;
 
   </#list>
   <#if validations?has_content>
   IF jsonb_array_length(v_errors) > 0 THEN
     v_response := (
-      'error', 
+      'ERROR', 
       NULL, 
       v_errors, 
       '23514', 
@@ -54,7 +62,7 @@ BEGIN
       'Ensure all fields in the ''errors'' array are correctly formatted', 
       'The provided data did not pass validation checks'
     );
-    CALL ${schema}.i_logs(response.status, response.message, c_service_name, in_created_by, v_metadata);    
+    CALL ${schema}.i_logs(v_response.status, v_response.message, c_service_name, created_by, v_metadata);
     RETURN v_response;
   END IF;
   </#if>
@@ -63,26 +71,28 @@ BEGIN
   -- Persist
   -- ------------------------------------------------------
 
-  INSERT INTO ${schema}.customer (
+  INSERT INTO ${schema}.${object} (
   <#list attributes as attribute>
     ${attribute.name}<#if attribute?has_next || hasAudit>, </#if>
   </#list> 
   <#if hasAudit>
+    created_by,
     updated_by
   </#if>
   )
   VALUES (
   <#list attributes as attribute>
-    in_${attribute.name}<#if attribute?has_next || hasAudit>, </#if>
+    ${attribute.name}<#if attribute?has_next || hasAudit>, </#if>
   </#list>  
   <#if hasAudit>
-    v_updated_by
+    created_by,
+    created_by
   </#if>
   )
   RETURNING ${object}.id, ${object}.updated_at INTO v_id, v_updated_at;  
 
   v_response := (
-    'success', 
+    'OK', 
     jsonb_build_object('id', v_id, 'updated_at', v_updated_at), 
     NULL, NULL, NULL, NULL, NULL
   );
@@ -95,7 +105,7 @@ BEGIN
   EXCEPTION
     WHEN UNIQUE_VIOLATION THEN
       v_response := (
-        'error', 
+        'ERROR', 
         NULL, 
         NULL, 
         '23514', 
@@ -103,11 +113,11 @@ BEGIN
         'A record already exists in the ${object} table', 
         'Check the provided data and try again'
       );
-      CALL ${schema}.i_logs(response.status, response.message, c_service_name, in_created_by, v_metadata);
+      CALL ${schema}.i_logs(v_response.status, v_response.message, c_service_name, created_by, v_metadata);
   
     WHEN OTHERS THEN
       v_response := (
-        'error', 
+        'ERROR', 
         NULL, 
         NULL, 
         SQLSTATE, 
@@ -115,7 +125,7 @@ BEGIN
         'Check database logs for more details', 
         SQLERRM
       );
-      CALL ${schema}.i_logs(response.status, response.message, c_service_name, in_created_by, v_metadata);
+      CALL ${schema}.i_logs(v_response.status, v_response.message, c_service_name, created_by, v_metadata);
 
     RETURN v_response;
   

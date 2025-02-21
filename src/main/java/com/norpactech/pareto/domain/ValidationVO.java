@@ -3,13 +3,11 @@ package com.norpactech.pareto.domain;
 import lombok.Data;
 
 @Data
-public class ValidationVO {
+public abstract class ValidationVO {
 
-  String type;
-  String attribute;
+  String name;
   
-  public ValidationVO(String type, String attribute) {
-    this.type = type;
-    this.attribute = attribute;
+  public ValidationVO(String name) {
+    this.name = name;
   }
 }

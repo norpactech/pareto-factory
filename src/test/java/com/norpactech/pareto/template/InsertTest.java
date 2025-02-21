@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.norpactech.pareto.domain.AttributeVO;
-import com.norpactech.pareto.domain.ValidationVO;
+import com.norpactech.pareto.domain.FunctionValidationVO;
 import com.norpactech.pareto.service.PgsqlGeneratorService;
 
 @SpringBootTest
@@ -20,18 +20,17 @@ class InsertTest {
   void generateCreate() throws Exception  {
 
     List<AttributeVO> attributes = List.of(
-      new AttributeVO("name", "text"),
-      new AttributeVO("description", "text"),
-      new AttributeVO("copyright", "text"),
-      new AttributeVO("created_by", "text")
+      new AttributeVO("name", "TEXT"),
+      new AttributeVO("description", "TEXT"),
+      new AttributeVO("copyright", "TEXT") 
     );	 
 
-    List<ValidationVO> validations = List.of(
-      new ValidationVO("generic_name", "name")
+    List<FunctionValidationVO> validations = List.of(
+      new FunctionValidationVO("generic_name", "name")
     );    
     
     boolean hasAudit = true;
-    String result = pgsqlGeneratorService.insert("target", "tenant", hasAudit, attributes, validations);
+    String result = pgsqlGeneratorService.insert("pareto", "tenant", hasAudit, attributes, validations);
     System.out.println(result);
   }
 }
