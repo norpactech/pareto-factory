@@ -1,5 +1,7 @@
 package com.norpactech.pareto.template;
 
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -14,7 +16,7 @@ import com.norpactech.pareto.domain.FunctionValidationVO;
 import com.norpactech.pareto.service.PgsqlGeneratorService;
 
 @SpringBootTest
-class InsertTest {
+class UpdateTest {
 
   @Autowired
   PgsqlGeneratorService pgsqlGeneratorService;
@@ -23,10 +25,12 @@ class InsertTest {
   void generateCreate() throws Exception  {
 
     List<AttributeVO> attributes = List.of(
+      new AttributeVO("id", "UUID"),
       new AttributeVO("name", "TEXT"),
       new AttributeVO("description", "TEXT"),
       new AttributeVO("copyright", "TEXT"), 
-      new AttributeVO("created_by", "TEXT") 
+      new AttributeVO("updated_at", "TIMESTAMPTZ"), 
+      new AttributeVO("updated_by", "TEXT")
     );	 
 
     List<FunctionValidationVO> validations = List.of(
@@ -34,11 +38,13 @@ class InsertTest {
     );    
     
     boolean hasAudit = true;
-    String result = pgsqlGeneratorService.insert("pareto", "tenant", hasAudit, attributes, validations);
+    String result = pgsqlGeneratorService.update("pareto", "tenant", hasAudit, attributes, validations);
     
-    Path path = Path.of("/Users/scott/pareto/pareto-db/Scripts/functions/i_tenant.sql");
+    Path path = Path.of("/Users/scott/pareto/pareto-db/Scripts/functions/u_tenant.sql");
     Files.write(path, result.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     
     System.out.println(result);
   }
 }
+
+

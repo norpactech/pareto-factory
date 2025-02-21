@@ -3,11 +3,8 @@
 -- ------------------------------------------------------
 CREATE OR REPLACE FUNCTION ${schema}.i_${object}(
   <#list attributes as attribute>
-  IN ${attribute.name} ${attribute.type}<#if attribute?has_next || hasAudit>, </#if>
+  IN ${attribute.name} ${attribute.type}<#if attribute?has_next>, </#if>
   </#list>
-  <#if hasAudit>
-  IN created_by TEXT
-  </#if>
 )
 RETURNS pg_resp
 AS $$
@@ -15,13 +12,18 @@ DECLARE
 
   c_service_name TEXT := 'i_${object}';
 
-  v_val_resp     pg_val;
-  v_errors       JSONB := '[]'::JSONB;
-  v_response     pg_resp;
   v_metadata     JSONB := '{}'::JSONB;
+  v_errors       JSONB := '[]'::JSONB;
+  v_val_resp     pg_val;
+  v_response     pg_resp;
 
   v_id           UUID;
   v_updated_at   TIMESTAMPTZ;
+
+  -- Set variables to avoid ambiguous column names
+  <#list attributes as attribute>
+  v_${attribute.name} ${attribute.type} := ${attribute.name};
+  </#list>
 
 BEGIN
 
@@ -31,11 +33,8 @@ BEGIN
 
   v_metadata := jsonb_build_object(
   <#list attributes as attribute>
-    '${attribute.name}', ${attribute.name}<#if attribute?has_next || hasAudit>, </#if>
+    '${attribute.name}', ${attribute.name}<#if attribute?has_next>, </#if>
   </#list>
-  <#if hasAudit>
-    'created_by', created_by
-  </#if>    
   );
   <#if validations?has_content>
   
@@ -70,9 +69,14 @@ BEGIN
   -- ------------------------------------------------------
   -- Persist
   -- ------------------------------------------------------
+  <#if hasAudit>
+    <#assign inserts = attributes?filter(item -> item.name != "created_by") />
+  <#else>
+    <#assign inserts = attributes />
+  </#if>
 
   INSERT INTO ${schema}.${object} (
-  <#list attributes as attribute>
+  <#list inserts as attribute>
     ${attribute.name}<#if attribute?has_next || hasAudit>, </#if>
   </#list> 
   <#if hasAudit>
@@ -81,12 +85,12 @@ BEGIN
   </#if>
   )
   VALUES (
-  <#list attributes as attribute>
-    ${attribute.name}<#if attribute?has_next || hasAudit>, </#if>
+  <#list inserts as attribute>
+    v_${attribute.name}<#if attribute?has_next || hasAudit>, </#if>
   </#list>  
   <#if hasAudit>
-    created_by,
-    created_by
+    v_created_by,
+    v_created_by
   </#if>
   )
   RETURNING ${object}.id, ${object}.updated_at INTO v_id, v_updated_at;  
@@ -114,6 +118,7 @@ BEGIN
         'Check the provided data and try again'
       );
       CALL ${schema}.i_logs(v_response.status, v_response.message, c_service_name, created_by, v_metadata);
+      RETURN v_response;
   
     WHEN OTHERS THEN
       v_response := (
@@ -126,8 +131,7 @@ BEGIN
         SQLERRM
       );
       CALL ${schema}.i_logs(v_response.status, v_response.message, c_service_name, created_by, v_metadata);
-
-    RETURN v_response;
+      RETURN v_response;
   
 END;
 $$ LANGUAGE plpgsql;

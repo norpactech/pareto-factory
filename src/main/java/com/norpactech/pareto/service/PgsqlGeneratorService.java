@@ -84,6 +84,37 @@ public class PgsqlGeneratorService {
     StringWriter writer = new StringWriter();
     template.process(model, writer);
     return writer.toString();
+  }   
+  /**
+   * Function to Update a ROW
+   * 
+   * @param schema
+   * @param object
+   * @param hasAudit
+   * @param attributes
+   * @param validations
+   * @return function
+   * @throws Exception
+   */
+  public String update(
+      String schema, 
+      String object, 
+      boolean hasAudit, 
+      List<AttributeVO> attributes, 
+      List<FunctionValidationVO> validations) throws Exception {
+
+    Template template = freemarkerConfig.getTemplate("pgsql/update.ftl");
+
+    Map<String, Object> model = new HashMap<>();
+    model.put("schema", schema);
+    model.put("object", object);
+    model.put("hasAudit", hasAudit);
+    model.put("attributes", attributes);
+    model.put("validations", validations);
+
+    // Process template
+    StringWriter writer = new StringWriter();
+    template.process(model, writer);
+    return writer.toString();
   }  
-  
 }
