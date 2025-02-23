@@ -14,7 +14,7 @@ import com.norpactech.pareto.domain.FunctionValidationVO;
 import com.norpactech.pareto.service.PgsqlGeneratorService;
 
 @SpringBootTest
-class InsertTest {
+class CreateTest {
 
   @Autowired
   PgsqlGeneratorService pgsqlGeneratorService;
@@ -34,7 +34,7 @@ class InsertTest {
     );    
     
     boolean hasAudit = true;
-    String result = pgsqlGeneratorService.insert("pareto", "tenant", hasAudit, attributes, validations);
+    String result = pgsqlGeneratorService.create("pareto", "tenant", hasAudit, attributes, validations);
     
     Path path = Path.of("/Users/scott/pareto/pareto-db/Scripts/functions/i_tenant.sql");
     Files.write(path, result.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);

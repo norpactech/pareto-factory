@@ -96,8 +96,12 @@ BEGIN
     v_response := (
       'OK', 
       jsonb_build_object('id', v_id, 'updated_at', v_updated_at), 
-      NULL, NULL, NULL, NULL, NULL
-    );
+      NULL, 
+      '00000',
+      'Update was successful', 
+      NULL, 
+      NULL
+  );    
   ELSE  
     -- Check for Optimistic Lock Error
     v_id := id;

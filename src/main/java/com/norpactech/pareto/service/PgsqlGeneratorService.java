@@ -36,10 +36,6 @@ public class PgsqlGeneratorService {
   }
   /**
    * Create validations
-   * 
-   * @param validations
-   * @return validation functions
-   * @throws Exception
    */
   public String validations(List<DeclarationValidationVO> validations) throws Exception {
 
@@ -54,17 +50,9 @@ public class PgsqlGeneratorService {
     return writer.toString();
   }    
   /**
-   * Function to Insert a ROW
-   * 
-   * @param schema
-   * @param object
-   * @param hasAudit
-   * @param attributes
-   * @param validations
-   * @return function
-   * @throws Exception
+   * Create (Insert) an object
    */
-  public String insert(
+  public String create(
       String schema, 
       String object, 
       boolean hasAudit, 
@@ -87,14 +75,6 @@ public class PgsqlGeneratorService {
   }   
   /**
    * Function to Update a ROW
-   * 
-   * @param schema
-   * @param object
-   * @param hasAudit
-   * @param attributes
-   * @param validations
-   * @return function
-   * @throws Exception
    */
   public String update(
       String schema, 
@@ -111,6 +91,39 @@ public class PgsqlGeneratorService {
     model.put("hasAudit", hasAudit);
     model.put("attributes", attributes);
     model.put("validations", validations);
+
+    // Process template
+    StringWriter writer = new StringWriter();
+    template.process(model, writer);
+    return writer.toString();
+  }
+  /**
+   * Functions to Deactivate/Reactivate (Soft Delete) an object
+   */
+  public String isActive(String schema, String object) throws Exception {
+
+    Template template = freemarkerConfig.getTemplate("pgsql/active.ftl");
+
+    Map<String, Object> model = new HashMap<>();
+    model.put("schema", schema);
+    model.put("object", object);
+
+    // Process template
+    StringWriter writer = new StringWriter();
+    template.process(model, writer);
+    return writer.toString();
+  }  
+  
+  /**
+   * Function to Delete a ROW
+   */
+  public String delete(String schema, String object) throws Exception {
+
+    Template template = freemarkerConfig.getTemplate("pgsql/delete.ftl");
+
+    Map<String, Object> model = new HashMap<>();
+    model.put("schema", schema);
+    model.put("object", object);
 
     // Process template
     StringWriter writer = new StringWriter();

@@ -1,5 +1,5 @@
 -- -------------------------------------------------------
--- Insert ${object}
+-- Create (Insert) ${object}
 -- ------------------------------------------------------
 CREATE OR REPLACE FUNCTION ${schema}.i_${object}(
   <#list attributes as attribute>
@@ -98,7 +98,11 @@ BEGIN
   v_response := (
     'OK', 
     jsonb_build_object('id', v_id, 'updated_at', v_updated_at), 
-    NULL, NULL, NULL, NULL, NULL
+    NULL, 
+    '00000',
+    'Insert was successful', 
+    NULL, 
+    NULL
   );
   RETURN v_response;
 
