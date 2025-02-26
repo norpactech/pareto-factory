@@ -4,10 +4,10 @@ spring:
 
   jpa:
     show-sql: false
-    generate-ddl: true
+    generate-ddl: false
     properties:
       hibernate:
-        ddl-auto: update
+        ddl-auto: none
         multiTenancy: DATABASE
     
 server:

@@ -1,0 +1,71 @@
+openapi: 3.0.1
+info:
+  title: Pareto API
+  description: API documentation for the Pareto Framework
+  version: 0.0.1
+  
+paths:
+  /api/users:
+    get:
+      summary: Get all users
+      description: Retrieve a list of users
+      operationId: getUsers
+      tags:
+        - Users
+      responses:
+        "200":
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+  /api/users/{id}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+
+# servers:
+#  - url: http://localhost:8080
+#    description: Local server
+                              
+# 3. Configure Spring Boot to Use the OpenAPI YAML File
+# Modify application.yml to specify the location of the OpenAPI file:
+
+# application.yml
+# yaml
+# Copy
+# Edit
+# springdoc:
+#   api-docs:
+#     path: /v3/api-docs
+#   swagger-ui:
+#     url: /openapi.yml
+#     path: /swagger-ui.html

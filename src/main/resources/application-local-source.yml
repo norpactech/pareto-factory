@@ -7,7 +7,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/norpac?currentSchema=pareto
     username: norpac 
     password: password
-
+    
 # Match with pareto-factory.tenant for default datasource
 tenant:
   name: system
