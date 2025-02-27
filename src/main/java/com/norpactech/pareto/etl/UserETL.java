@@ -46,7 +46,7 @@ public class UserETL {
         else {
           user.setEmail(csvRecord.get("email"));
           user.setFullName(csvRecord.get("full_name"));
-          user.setUpdatedBy("etl2");
+          user.setUpdatedBy("etl");
           userRepository.update(user);
         }
       }

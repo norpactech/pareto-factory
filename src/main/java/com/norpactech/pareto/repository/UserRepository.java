@@ -3,7 +3,6 @@ package com.norpactech.pareto.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,18 +11,18 @@ import org.springframework.stereotype.Repository;
 import com.norpactech.pareto.entity.User;
 
 @Repository
-public class UserRepository {
+public class UserRepository extends BaseRepository {
 
-  @Autowired
-  JdbcTemplate jdbcTemplate;
-  
+  public UserRepository(JdbcTemplate jdbcTemplate) {
+    super(jdbcTemplate);
+  }
   /**
    * Find user by username
    */
   public User findByUsername(String username) {
     
-    String sql = "select * from pareto.user where username = ?";
-    
+    String sql = String.format("select * from %s.user where username = ?", getSchema());
+
     try {
       return jdbcTemplate.queryForObject(sql, new RowMapper<User>() {
         @Override
@@ -41,7 +40,8 @@ public class UserRepository {
    */
   public int insert(User user) {
     
-    String sql = "INSERT INTO pareto.user " +
+    String sql = String.format( 
+      "INSERT INTO %s.user " +
         "(" +
            "username, " +
            "email, " + 
@@ -49,8 +49,8 @@ public class UserRepository {
            "created_by, " + 
            "updated_by " +
         ") " +
-      "VALUES " +
-        "(?,?,?,?,?)";
+       "VALUES " +
+        "(?,?,?,?,?)", getSchema());
 
     return jdbcTemplate.update(sql, 
       user.getUsername(), 
@@ -64,12 +64,13 @@ public class UserRepository {
    */
   public int update(User user) {
     
-    String sql = "UPDATE pareto.user set " +
-                   "username = ?, " +
-                   "email = ?, " +
-                   "full_name = ?, " +
-                   "updated_by = ? " +
-                  "WHERE id = ?";
+    String sql = String.format( 
+      "UPDATE %s.user set " +
+        "username = ?, " +
+        "email = ?, " +
+        "full_name = ?, " +
+        "updated_by = ? " +
+      "WHERE id = ?", getSchema());
 
     return jdbcTemplate.update(sql, 
       user.getUsername(), 
@@ -77,5 +78,16 @@ public class UserRepository {
       user.getFullName(),
       user.getUpdatedBy(),
       user.getId());
+  }
+  /**
+   * Delete
+   */
+  public int delete(String username) {
+    
+    String sql = String.format( 
+      "DELETE FROM %s.user " +
+       "WHERE username = ?", getSchema());
+
+    return jdbcTemplate.update(sql, username); 
   }
 }
