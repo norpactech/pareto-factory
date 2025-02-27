@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import com.norpactech.pareto.entity.Tenant;
 import com.norpactech.pareto.repository.TenantRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class TenantETL {
   
@@ -28,31 +31,47 @@ public class TenantETL {
     ClassPathResource resource = new ClassPathResource("etl/Tenant.csv");
     Path path = Paths.get(resource.getURI());
 
+    int persisted = 0;
+    int deleted = 0;
+    
     Reader reader = Files.newBufferedReader(path);
     try (CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build())) {
       for (CSVRecord csvRecord : csvParser) {
 
-        Tenant tenant = tenantRepository.findByName(csvRecord.get("name"));
-        
-        if (tenant == null) {
-          tenant = new Tenant();
-          tenant.setName(csvRecord.get("name"));
-          tenant.setDescription(csvRecord.get("description"));
-          tenant.setCopyright(csvRecord.get("copyright"));
-          tenant.setCreatedBy("etl");
-          tenantRepository.insert(tenant);                    
+        Tenant tenant = tenantRepository.findByAltKey(csvRecord.get("name"));
+        String action = csvRecord.get("action").toLowerCase();
+
+        // Persist else delete
+        if (action.startsWith("p")) {
+          if (tenant == null) {
+            tenant = new Tenant();
+            tenant.setName(csvRecord.get("name"));
+            tenant.setDescription(csvRecord.get("description"));
+            tenant.setCopyright(csvRecord.get("copyright"));
+            tenant.setCreatedBy("etl");
+            tenantRepository.insert(tenant);                    
+          }
+          else {
+            tenant.setDescription(csvRecord.get("description"));
+            tenant.setCopyright(csvRecord.get("copyright"));
+            tenant.setUpdatedBy("etl");
+            tenantRepository.update(tenant);
+            tenantRepository.delete(csvRecord.get("name"));
+          }
+          persisted++;
+        }
+        else if (action.startsWith("d") && tenant != null) {
+          tenantRepository.delete(csvRecord.get("name"));
+          deleted++;
         }
         else {
-          tenant.setDescription(csvRecord.get("description"));
-          tenant.setCopyright(csvRecord.get("copyright"));
-          tenant.setUpdatedBy("etl2");
-          tenantRepository.update(tenant);
-          tenantRepository.delete(csvRecord.get("name"));
+          log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("username"));
         }
       }
     } 
     catch (DataAccessException e) {
       e.printStackTrace();
     }
+    log.info("Tenant ETL Completed with {} persisted and {} deleted", persisted, deleted );
   }
 }

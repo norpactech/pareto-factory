@@ -19,7 +19,7 @@ public class TenantRepository extends BaseRepository {
   /**
    * Find by alternate key
    */
-  public Tenant findByName(String name) {
+  public Tenant findByAltKey(String name) {
     
     String sql = String.format("select * from %s.tenant where name = ?", getSchema());
 
@@ -82,12 +82,12 @@ public class TenantRepository extends BaseRepository {
   /**
    * Delete
    */
-  public int delete(String username) {
+  public int delete(String name) {
     
     String sql = String.format( 
       "DELETE FROM %s.tenant " +
        "WHERE name = ?", getSchema());
 
-    return jdbcTemplate.update(sql, username); 
+    return jdbcTemplate.update(sql, name); 
   }
 }

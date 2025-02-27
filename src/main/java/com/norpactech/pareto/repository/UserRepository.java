@@ -19,7 +19,7 @@ public class UserRepository extends BaseRepository {
   /**
    * Find by alternate key
    */
-  public User findByUsername(String username) {
+  public User findByAltKey(String username) {
     
     String sql = String.format("select * from %s.user where username = ?", getSchema());
 

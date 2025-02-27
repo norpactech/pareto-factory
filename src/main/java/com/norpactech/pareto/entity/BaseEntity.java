@@ -1,5 +1,7 @@
 package com.norpactech.pareto.entity;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -17,19 +19,13 @@ public abstract class BaseEntity {
 
   public BaseEntity() {}
   
-  public BaseEntity(
-      Object id, 
-      Timestamp createdAt, 
-      String createdBy,
-      Timestamp updatedAt,
-      String updatedBy,
-      Boolean isActive) {
-    
-    this.id = (UUID) id;
-    this.createdAt = createdAt;
-    this.createdBy = createdBy;
-    this.updatedAt = updatedAt;
-    this.updatedBy = updatedBy;
-    this.isActive = isActive;
+  public BaseEntity(ResultSet rs) throws SQLException {
+
+    this.id = rs.getObject("id", UUID.class); 
+    this.createdAt = rs.getTimestamp("created_at"); 
+    this.createdBy = rs.getString("created_by"); 
+    this.updatedAt = rs.getTimestamp("updated_at");
+    this.updatedBy = rs.getString("updated_by"); 
+    this.isActive = rs.getBoolean("is_active");
   }
 }

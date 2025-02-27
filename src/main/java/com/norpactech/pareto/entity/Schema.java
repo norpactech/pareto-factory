@@ -2,25 +2,26 @@ package com.norpactech.pareto.entity;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class Tenant extends BaseEntity {
+public class Schema extends BaseEntity {
   
+  private UUID   idTenant;
   private String name;
   private String description;
-  private String copyright;
 
-  public Tenant() {}
+  public Schema() {}
   
-  public Tenant(ResultSet rs) throws SQLException {
+  public Schema(ResultSet rs) throws SQLException {
     super(rs);
 
+    this.idTenant = rs.getObject("id_tenant", UUID.class);
     this.name = rs.getString("name");
     this.description = rs.getString("description");
-    this.copyright = rs.getString("copyright");
   }
 }
