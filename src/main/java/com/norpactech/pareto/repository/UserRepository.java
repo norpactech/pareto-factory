@@ -17,7 +17,7 @@ public class UserRepository extends BaseRepository {
     super(jdbcTemplate);
   }
   /**
-   * Find user by username
+   * Find by alternate key
    */
   public User findByUsername(String username) {
     

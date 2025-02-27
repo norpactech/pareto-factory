@@ -5,13 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserEtlTest {
+class TenantEtlTest {
 
   @Autowired
-  UserETL userETL;
+  TenantETL tenantETL;
 
   @Test
-  void userEtlTest() throws Exception  {
-    userETL.loadData();
+  void tenantEtlTest() throws Exception  {
+    tenantETL.loadData();
   }
 }
