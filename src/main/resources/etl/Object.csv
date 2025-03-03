@@ -1,0 +1,2 @@
+action,tenant,schema,name,description,has_identifier,has_audit
+p,system,pareto,tenant,Tenant Object,TRUE,TRUE
