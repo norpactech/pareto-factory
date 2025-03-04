@@ -21,6 +21,9 @@ class AllEtlTest {
   RefTableTypeETL refTableTypeETL;
 
   @Autowired
+  RefTablesETL refTablesETL;
+
+  @Autowired
   SchemaETL schemaETL;
 
   @Autowired
@@ -30,7 +33,8 @@ class AllEtlTest {
   void objectEtlTest() throws Exception  {
 	  tenantETL.loadData();
 	  userETL.loadData();
-	  refTableTypeETL.loadData();
+    refTableTypeETL.loadData();
+    refTablesETL.loadData();
     schemaETL.loadData();
   	objectETL.loadData();
   }

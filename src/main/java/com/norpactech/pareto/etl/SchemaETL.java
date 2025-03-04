@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class SchemaETL {
+public class SchemaETL extends BaseETL {
   
   @Autowired
   SchemaRepository schemaRepository;
@@ -41,6 +41,9 @@ public class SchemaETL {
     Reader reader = Files.newBufferedReader(path);
     try (CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build())) {
       for (CSVRecord csvRecord : csvParser) {
+        if (isComment(csvRecord)) {
+          continue;
+        }
         Tenant tenant = tenantRepository.findByAltKey(csvRecord.get("tenant"));
         if (tenant == null) {
           log.error("Tenant <" + csvRecord.get("tenant") + "> not found " +
@@ -66,9 +69,6 @@ public class SchemaETL {
             schemaRepository.update(schema);
           }
           persisted++;
-        }
-        else if (action.startsWith("//")) {
-          continue; // Skip comments
         }
         else if (action.startsWith("d") && schema != null) {
           schemaRepository.delete(tenant.getId(), csvRecord.get("name"));

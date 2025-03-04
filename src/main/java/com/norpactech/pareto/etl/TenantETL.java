@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class TenantETL {
+public class TenantETL extends BaseETL {
   
   @Autowired
   TenantRepository tenantRepository;
@@ -37,7 +37,9 @@ public class TenantETL {
     Reader reader = Files.newBufferedReader(path);
     try (CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build())) {
       for (CSVRecord csvRecord : csvParser) {
-
+        if (isComment(csvRecord)) {
+          continue;
+        }
         Tenant tenant = tenantRepository.findByAltKey(csvRecord.get("name"));
         String action = csvRecord.get("action").toLowerCase();
 
@@ -63,10 +65,7 @@ public class TenantETL {
           tenantRepository.delete(csvRecord.get("name"));
           deleted++;
         }
-        else if (action.startsWith("//")) {
-          continue; // Skip comments
-        }
-        else {
+       else {
           log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("username"));
         }
       }

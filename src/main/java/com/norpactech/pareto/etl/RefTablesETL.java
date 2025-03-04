@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class RefTablesETL {
+public class RefTablesETL extends BaseETL {
 
   @Autowired
   TenantRepository tenantRepository;
@@ -46,16 +46,19 @@ public class RefTablesETL {
     Reader reader = Files.newBufferedReader(path);
     try (CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build())) {
       for (CSVRecord csvRecord : csvParser) {
+        if (isComment(csvRecord)) {
+          continue;
+        }
         Tenant tenant = tenantRepository.findByAltKey(csvRecord.get("tenant"));
         if (tenant == null) {
           log.error("Tenant <" + csvRecord.get("tenant") + "> not found " +
-              "for schema: " + csvRecord.get("name") + ". Skipping...");
+              "for ref_tables: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }
         RefTableType refTableType = refTableTypeRepository.findByAltKey(tenant.getId(), csvRecord.get("ref_table_type"));
         if (refTableType == null) {
-          log.error("Ref Table Type <" + csvRecord.get("ref_table_type") + "> not found " +
-              "for object: " + csvRecord.get("name") + ". Skipping...");
+          log.error("Reference Table Type <" + csvRecord.get("ref_table_type") + "> not found " +
+              "for ref_tables: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }        
         RefTables refTables = refTablesRepository.findByAltKey(tenant.getId(), refTableType.getId(),csvRecord.get("name"));
@@ -78,7 +81,7 @@ public class RefTablesETL {
             refTables.setName(csvRecord.get("name"));
             refTables.setDescription(csvRecord.get("description"));
             refTables.setValue(csvRecord.get("value"));            
-            refTables.setSequence(Integer.getInteger(csvRecord.get("sequence")));            
+            refTables.setSequence(Integer.parseInt(csvRecord.get("sequence")));            
             refTables.setUpdatedBy("etl2");
             refTablesRepository.update(refTables);
           }
@@ -87,9 +90,6 @@ public class RefTablesETL {
         else if (action.startsWith("d") && refTableType != null) {
           refTablesRepository.delete(tenant.getId(), refTableType.getId(), csvRecord.get("name"));
           deleted++;
-        }
-        else if (action.startsWith("//")) {
-           continue; // Skip comments
         }
         else {
           log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("name"));

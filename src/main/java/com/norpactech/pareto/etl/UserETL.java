@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class UserETL {
+public class UserETL extends BaseETL {
   
   @Autowired
   UserRepository userRepository;
@@ -38,7 +38,9 @@ public class UserETL {
     
     try (CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build())) {
       for (CSVRecord csvRecord : csvParser) {
-
+        if (isComment(csvRecord)) {
+          continue;
+        }
         User user = userRepository.findByAltKey(csvRecord.get("username"));
         String action = csvRecord.get("action").toLowerCase();
 
@@ -64,9 +66,6 @@ public class UserETL {
         else if (action.startsWith("d") && user != null) {
           userRepository.delete(csvRecord.get("username"));
           deleted++;
-        }
-        else if (action.startsWith("//")) {
-          continue; // Skip comments
         }
         else {
           log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("username"));

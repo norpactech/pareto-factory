@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class RefTableTypeETL {
+public class RefTableTypeETL extends BaseETL {
   
   @Autowired
   TenantRepository tenantRepository;
@@ -41,6 +41,9 @@ public class RefTableTypeETL {
     Reader reader = Files.newBufferedReader(path);
     try (CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build())) {
       for (CSVRecord csvRecord : csvParser) {
+        if (isComment(csvRecord)) {
+          continue;
+        }
         Tenant tenant = tenantRepository.findByAltKey(csvRecord.get("tenant"));
         if (tenant == null) {
           log.error("Tenant <" + csvRecord.get("tenant") + "> not found " +
@@ -70,9 +73,6 @@ public class RefTableTypeETL {
         else if (action.startsWith("d") && refTableType != null) {
           refTableTypeRepository.delete(tenant.getId(), csvRecord.get("name"));
           deleted++;
-        }
-        else if (action.startsWith("//")) {
-          continue; // Skip comments
         }
         else {
           log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("username"));
