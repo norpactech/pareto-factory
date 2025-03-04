@@ -2,7 +2,6 @@ package com.norpactech.pareto.repository;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -12,9 +11,6 @@ import com.norpactech.pareto.entity.RefTableType;
 @Repository
 public class RefTableTypeRepository extends BaseRepository {
 
-  @Autowired
-  TenantRepository tenantRepository;
-  
   public RefTableTypeRepository(JdbcTemplate jdbcTemplate) {
     super(jdbcTemplate);
   }

@@ -1,14 +1,19 @@
 action,tenant,ref_table_type,name,description,value,sequence
-p,system,datatype,UUID,Unique Identifier,UUID,1
-,,,Character,Fixed Length Character String,CHAR,2
-,,,Text,Varying Length Character String,TEXT,3
-,,,Boolean,True/False Value,BOOLEAN,4
-,,,Integer,Integer,INTEGER,5
-,,,BigInt ,Big Integer,BIGINT,6
-,,,Float,Floating Point Number,FLOAT,7
-,,,Double,Double Precision Floating Point Number,DOUBLE,8
-,,,Numeric,Numeric with Length and Decimal Point,NUMERIC,9
-,,,Date,Date,DATE,10
-,,,Time,Time of Day,TIME,11
-,,,DateTime,Date and Time value,DATETIME,12
-,,,Timestamp,System Timestamp,TIMESTAMP,13
+p,system,datatype,ID,Unique Identifier - System Dependent UUID/BigInt Sequence ,ID,1
+p,system,datatype,Character,Fixed-length string,CHAR,2
+p,system,datatype,Varchar,Variable-length string,VARCHAR,3
+p,system,datatype,Text,Large text storage,TEXT,4
+p,system,datatype,Boolean,TRUE or FALSE values,BOOLEAN,5
+p,system,datatype,SmallInt,Small Integer,SMALLINT,6
+p,system,datatype,Integer,Integer,INTEGER,7
+p,system,datatype,BigInt ,Big Integer,BIGINT,8
+p,system,datatype,Double,Approximate precision floating-point numbers,DOUBLE,9
+p,system,datatype,Decimal,Exact precision decimal numbers,DECIMAL,10
+p,system,datatype,Real,Floating-point number with lower precision,REAL,11
+p,system,datatype,Date,Stores only date,DATE,12
+p,system,datatype,Time,Stores only time,TIME,13
+p,system,datatype,DateTime,Date and Time value,DATETIME,14
+p,system,datatype,Timestamp,System date and time,TIMESTAMP,15
+p,system,datatype,BLOB,Binary Data,BLOB,16
+p,system,datatype,JSON,JSON-formatted data,JSON,17
+// end datatype,,,,,,

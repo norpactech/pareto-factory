@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.norpactech.pareto.entity.RefTableType;
 import com.norpactech.pareto.entity.Tenant;
-import com.norpactech.pareto.repository.RefTableTypeRepository;
+import com.norpactech.pareto.repository.RefTablesRepository;
 import com.norpactech.pareto.repository.TenantRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class RefTableTypeETL {
   TenantRepository tenantRepository;
 
   @Autowired
-  RefTableTypeRepository refTableTypeRepository;
+  RefTablesRepository refTableTypeRepository;
   
   public void loadData() throws Exception {
 
@@ -42,6 +42,12 @@ public class RefTableTypeETL {
     try (CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build())) {
       for (CSVRecord csvRecord : csvParser) {
         Tenant tenant = tenantRepository.findByAltKey(csvRecord.get("tenant"));
+        if (tenant == null) {
+          log.error("Tenant <" + csvRecord.get("tenant") + "> not found " +
+              "for ref_table_type: " + csvRecord.get("name") + ". Skipping...");
+          continue;
+        }
+        RefTableType refTableType = refTableTypeRepository.findByAltKey(tenant.getName(), csvRecord.get("name"));
         if (tenant == null) {
           log.error("Tenant <" + csvRecord.get("tenant") + "> not found " +
               "for ref_table_type: " + csvRecord.get("name") + ". Skipping...");

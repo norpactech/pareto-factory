@@ -2,7 +2,6 @@ package com.norpactech.pareto.repository;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -10,9 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ObjectRepository extends BaseRepository {
 
-  @Autowired
-  TenantRepository tenantRepository;
-  
   public ObjectRepository(JdbcTemplate jdbcTemplate) {
     super(jdbcTemplate);
   }
@@ -66,8 +62,6 @@ public class ObjectRepository extends BaseRepository {
     
     String sql = String.format( 
       "UPDATE %s.object set " +
-        "id_schema = ?, " +
-        "name = ?, " +
         "description = ?, " +
         "has_identifier = ?, " +
         "has_audit = ?, " +
@@ -75,8 +69,6 @@ public class ObjectRepository extends BaseRepository {
       "WHERE id = ?", getSchema());
 
     return jdbcTemplate.update(sql, 
-      object.getIdSchema(),
-      object.getName(), 
       object.getDescription(), 
       object.getHasIdentifier(), 
       object.getHasAudit(), 
