@@ -65,6 +65,9 @@ public class UserETL {
           userRepository.delete(csvRecord.get("username"));
           deleted++;
         }
+        else if (action.startsWith("//")) {
+          continue; // Skip comments
+        }
         else {
           log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("username"));
         }

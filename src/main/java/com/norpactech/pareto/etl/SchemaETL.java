@@ -67,6 +67,9 @@ public class SchemaETL {
           }
           persisted++;
         }
+        else if (action.startsWith("//")) {
+          continue; // Skip comments
+        }
         else if (action.startsWith("d") && schema != null) {
           schemaRepository.delete(tenant.getId(), csvRecord.get("name"));
           deleted++;

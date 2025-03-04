@@ -63,6 +63,9 @@ public class TenantETL {
           tenantRepository.delete(csvRecord.get("name"));
           deleted++;
         }
+        else if (action.startsWith("//")) {
+          continue; // Skip comments
+        }
         else {
           log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("username"));
         }

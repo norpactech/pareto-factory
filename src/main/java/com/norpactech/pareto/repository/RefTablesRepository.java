@@ -6,7 +6,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.norpactech.pareto.entity.RefTableType;
 import com.norpactech.pareto.entity.RefTables;
 
 @Repository
@@ -19,12 +18,15 @@ public class RefTablesRepository extends BaseRepository {
    * Find by alternate key
    * @throws Exception 
    */
-  public RefTableType findByAltKey(UUID idTenant, UUID idRefTableType, String name) throws Exception {
+  public RefTables findByAltKey(UUID idTenant, UUID idRefTableType, String name) throws Exception {
     
-    String sql = String.format("select * from %s.ref_tables where id_tenant = ? and id_ref_table_type = ? and name = ?", getSchema());
+    String sql = String.format("select * from %s.ref_tables " + 
+                                 "where id_tenant = ? " + 
+                                   "and id_ref_table_type = ? " + 
+                                   "and name = ?", getSchema());
 
     try {
-      return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new RefTableType(rs), idTenant, idRefTableType, name);
+      return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new RefTables(rs), idTenant, idRefTableType, name);
     } 
     catch (EmptyResultDataAccessException e) {
       return null;
@@ -36,7 +38,7 @@ public class RefTablesRepository extends BaseRepository {
   public int insert(RefTables refTables) {
     
     String sql = String.format( 
-      "INSERT INTO %s.ref_table_type " +
+      "INSERT INTO %s.ref_tables " +
         "(" +
            "id_tenant, " + 
            "id_ref_table_type, " + 
@@ -48,7 +50,7 @@ public class RefTablesRepository extends BaseRepository {
            "updated_by " +
         ") " +
        "VALUES " +
-        "(?,?,?,?,?)", getSchema());
+        "(?,?,?,?,?,?,?,?)", getSchema());
 
     return jdbcTemplate.update(sql, 
       refTables.getIdTenant(),
@@ -66,7 +68,8 @@ public class RefTablesRepository extends BaseRepository {
   public int update(RefTables refTables) {
     
     String sql = String.format( 
-      "UPDATE %s.ref_table_type set " +
+      "UPDATE %s.ref_tables set " +
+        "name = ?, " +
         "description = ?, " +
         "value = ?, " +
         "sequence = ?, " +
@@ -74,6 +77,7 @@ public class RefTablesRepository extends BaseRepository {
       "WHERE id = ?", getSchema());
 
     return jdbcTemplate.update(sql, 
+      refTables.getName(), 
       refTables.getDescription(), 
       refTables.getValue(), 
       refTables.getSequence(), 

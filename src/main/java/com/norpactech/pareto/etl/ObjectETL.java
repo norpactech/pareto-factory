@@ -85,6 +85,9 @@ public class ObjectETL {
           objectRepository.delete(schema.getId(), csvRecord.get("name"));
           deleted++;
         }
+        else if (action.startsWith("//")) {
+          continue; // Skip comments
+        }
         else {
           log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("name"));
         }
