@@ -7,7 +7,14 @@ spring:
     url: jdbc:postgresql://localhost:5432/norpac?currentSchema=pareto
     username: norpac 
     password: password
-         
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 50  # Adjust based on PostgreSQL max_connections
+      idle-timeout: 60000  # Keep idle connections for 1 minute
+      max-lifetime: 1740000  # Slightly less than 30 minutes
+      connection-timeout: 30000  # 30 seconds max wait for a connection
+      leak-detection-threshold: 5000  # Detect unclosed connections
+
 # Match with pareto-factory.tenant for default datasource
 tenant:
   name: system

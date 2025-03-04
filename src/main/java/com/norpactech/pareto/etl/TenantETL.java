@@ -56,7 +56,6 @@ public class TenantETL {
             tenant.setCopyright(csvRecord.get("copyright"));
             tenant.setUpdatedBy("etl");
             tenantRepository.update(tenant);
-            tenantRepository.delete(csvRecord.get("name"));
           }
           persisted++;
         }

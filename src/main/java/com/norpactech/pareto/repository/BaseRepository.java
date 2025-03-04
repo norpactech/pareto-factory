@@ -10,16 +10,20 @@ public abstract class BaseRepository {
     this.jdbcTemplate = jdbcTemplate;
   }
   
+  String schema = null;
+  
   public String getSchema() {
-    
-    String schema = null;
+
+    if (this.schema != null) {
+      return this.schema;
+    }
     
     try {
-      schema = jdbcTemplate.getDataSource().getConnection().getSchema();
+      this.schema = jdbcTemplate.getDataSource().getConnection().getSchema();
     }
     catch (Exception e) {
       throw new RuntimeException(e);
     }
-    return schema;
+    return this.schema;
   }
 }

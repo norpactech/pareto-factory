@@ -1,11 +1,7 @@
 package com.norpactech.pareto.repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.norpactech.pareto.entity.User;
@@ -24,16 +20,11 @@ public class UserRepository extends BaseRepository {
     String sql = String.format("select * from %s.user where username = ?", getSchema());
 
     try {
-      return jdbcTemplate.queryForObject(sql, new RowMapper<User>() {
-        @Override
-        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-          return new User(rs);
-        }
-      }, username);
-    }
-    catch(EmptyResultDataAccessException e) {
+      return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new User(rs), username);
+    } 
+    catch (EmptyResultDataAccessException e) {
       return null;
-    }
+    }    
   }
   /**
    * Insert

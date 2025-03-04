@@ -7,27 +7,27 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.norpactech.pareto.entity.Schema;
+import com.norpactech.pareto.entity.RefTableType;
 
 @Repository
-public class SchemaRepository extends BaseRepository {
+public class RefTableTypeRepository extends BaseRepository {
 
   @Autowired
   TenantRepository tenantRepository;
   
-  public SchemaRepository(JdbcTemplate jdbcTemplate) {
+  public RefTableTypeRepository(JdbcTemplate jdbcTemplate) {
     super(jdbcTemplate);
   }
   /**
    * Find by alternate key
    * @throws Exception 
    */
-  public Schema findByAltKey(UUID idTenant, String name) throws Exception {
+  public RefTableType findByAltKey(UUID idTenant, String name) throws Exception {
     
-    String sql = String.format("select * from %s.schema where id_tenant = ? and name = ?", getSchema());
+    String sql = String.format("select * from %s.ref_table_type where id_tenant = ? and name = ?", getSchema());
 
     try {
-      return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Schema(rs), idTenant, name);
+      return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new RefTableType(rs), idTenant, name);
     } 
     catch (EmptyResultDataAccessException e) {
       return null;
@@ -36,10 +36,10 @@ public class SchemaRepository extends BaseRepository {
   /**
    * Insert
    */
-  public int insert(Schema schema) {
+  public int insert(RefTableType refTableType) {
     
     String sql = String.format( 
-      "INSERT INTO %s.schema " +
+      "INSERT INTO %s.ref_table_type " +
         "(" +
            "id_tenant, " + 
            "name, " +
@@ -51,19 +51,19 @@ public class SchemaRepository extends BaseRepository {
         "(?,?,?,?,?)", getSchema());
 
     return jdbcTemplate.update(sql, 
-      schema.getIdTenant(),
-      schema.getName(), 
-      schema.getDescription(), 
-      schema.getCreatedBy(),
-      schema.getCreatedBy());
+      refTableType.getIdTenant(),
+      refTableType.getName(), 
+      refTableType.getDescription(), 
+      refTableType.getCreatedBy(),
+      refTableType.getCreatedBy());
   }
   /**
    * Update
    */
-  public int update(Schema schema) {
+  public int update(RefTableType refTableType) {
     
     String sql = String.format( 
-      "UPDATE %s.schema set " +
+      "UPDATE %s.ref_table_type set " +
         "id_tenant = ?, " +
         "name = ?, " +
         "description = ?, " +
@@ -71,11 +71,11 @@ public class SchemaRepository extends BaseRepository {
       "WHERE id = ?", getSchema());
 
     return jdbcTemplate.update(sql, 
-      schema.getIdTenant(),
-      schema.getName(), 
-      schema.getDescription(), 
-      schema.getUpdatedBy(),
-      schema.getId());
+      refTableType.getIdTenant(),
+      refTableType.getName(), 
+      refTableType.getDescription(), 
+      refTableType.getUpdatedBy(),
+      refTableType.getId());
   }
   /**
    * Delete
@@ -83,7 +83,7 @@ public class SchemaRepository extends BaseRepository {
   public int delete(UUID idTenant, String name) throws Exception {
     
     String sql = String.format( 
-      "DELETE FROM %s.schema " +
+      "DELETE FROM %s.ref_table_type " +
        "WHERE id_tenant = ? " +
          "AND name = ?", getSchema());
 

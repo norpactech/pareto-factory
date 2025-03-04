@@ -86,13 +86,13 @@ public class ObjectETL {
           deleted++;
         }
         else {
-          log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("username"));
+          log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("name"));
         }
       }
     } 
     catch (DataAccessException e) {
       e.printStackTrace();
     }
-    log.info("Schema ETL Completed with {} persisted and {} deleted", persisted, deleted );
+    log.info("Object ETL Completed with {} persisted and {} deleted", persisted, deleted );
   }
 }
