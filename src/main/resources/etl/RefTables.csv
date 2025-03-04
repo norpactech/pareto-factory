@@ -1,0 +1,14 @@
+action,tenant,ref_table_type,name,description,value,sequence
+p,system,datatype,UUID,Unique Identifier,UUID,1
+,,,Character,Fixed Length Character String,CHAR,2
+,,,Text,Varying Length Character String,TEXT,3
+,,,Boolean,True/False Value,BOOLEAN,4
+,,,Integer,Integer,INTEGER,5
+,,,BigInt ,Big Integer,BIGINT,6
+,,,Float,Floating Point Number,FLOAT,7
+,,,Double,Double Precision Floating Point Number,DOUBLE,8
+,,,Numeric,Numeric with Length and Decimal Point,NUMERIC,9
+,,,Date,Date,DATE,10
+,,,Time,Time of Day,TIME,11
+,,,DateTime,Date and Time value,DATETIME,12
+,,,Timestamp,System Timestamp,TIMESTAMP,13

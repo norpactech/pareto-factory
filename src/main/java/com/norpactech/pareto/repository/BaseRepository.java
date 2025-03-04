@@ -1,5 +1,8 @@
 package com.norpactech.pareto.repository;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public abstract class BaseRepository {
@@ -18,10 +21,10 @@ public abstract class BaseRepository {
       return this.schema;
     }
     
-    try {
-      this.schema = jdbcTemplate.getDataSource().getConnection().getSchema();
-    }
-    catch (Exception e) {
+    try (Connection conn = jdbcTemplate.getDataSource().getConnection()) { 
+      this.schema = conn.getSchema();
+    } 
+    catch (SQLException e) {
       throw new RuntimeException(e);
     }
     return this.schema;
