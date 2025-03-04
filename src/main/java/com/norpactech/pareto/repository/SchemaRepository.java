@@ -20,7 +20,7 @@ public class SchemaRepository extends BaseRepository {
    */
   public Schema findByAltKey(UUID idTenant, String name) throws Exception {
     
-    String sql = String.format("select * from %s.schema where id_tenant = ? and name = ?", getSchema());
+    String sql = String.format("select * from %s.schema where id_tenant = ? and lower(name) = lower(?)", getSchema());
 
     try {
       return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Schema(rs), idTenant, name);
@@ -81,7 +81,7 @@ public class SchemaRepository extends BaseRepository {
     String sql = String.format( 
       "DELETE FROM %s.schema " +
        "WHERE id_tenant = ? " +
-         "AND name = ?", getSchema());
+         "AND lower(name) = lower(?)", getSchema());
 
     return jdbcTemplate.update(sql, idTenant, name); 
   }

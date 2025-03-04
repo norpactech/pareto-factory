@@ -6,7 +6,7 @@ p,system,datatype,Text,Large text storage,TEXT,4
 p,system,datatype,Boolean,TRUE or FALSE values,BOOLEAN,5
 p,system,datatype,SmallInt,Small Integer,SMALLINT,6
 p,system,datatype,Integer,Integer,INTEGER,7
-p,system,datatype,BigInt ,Big Integer,BIGINT,8
+p,system,datatype,BigInt,Big Integer,BIGINT,8
 p,system,datatype,Double,Approximate precision floating-point numbers,DOUBLE,9
 p,system,datatype,Decimal,Exact precision decimal numbers,DECIMAL,10
 p,system,datatype,Real,Floating-point number with lower precision,REAL,11

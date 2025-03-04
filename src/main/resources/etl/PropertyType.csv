@@ -1,24 +1,24 @@
-action,tenant,name,description,data_type,length,precision,is_nullable,default_value,validation
+action,tenant,datatype,name,description,length,precision,is_nullable,default_value,validation
 // commons,,,,,,,,,
-p,system,id,Unique Identifier - System Dependent,UUID,,,FALSE,GEN_RANDOM_UUID(),
-p,system,username,User Name,TEXT,50,,FALSE,,
-p,system,password,Password,TEXT,255,,FALSE,,
-p,system,created_at,Created At Timestamp,TIMESTAMP,,,FALSE,CURRENT_TIMESTAMP,
-p,system,created_by,Created By User/Process,TEXT,50,,FALSE,,
-p,system,updated_at,Updated At Timestamp,TIMESTAMP,,,FALSE,CURRENT_TIMESTAMP,
-p,system,updated_by,Updated By User/Process,TEXT,50,,FALSE,,
-p,system,active,Is Active Flag,BOOLEAN,,,FALSE,TRUE,
+p,system,ID,id,Unique Identifier - System Dependent,,,FALSE,GEN_RANDOM_UUID(),
+p,system,Varchar,username,User Name,50,,FALSE,,
+p,system,Varchar,password,Password,255,,FALSE,,
+p,system,Timestamp,created_at,Created At Timestamp,,,FALSE,CURRENT_TIMESTAMP,
+p,system,Varchar,created_by,Created By User/Process,50,,FALSE,,
+p,system,Timestamp,updated_at,Updated At Timestamp,,,FALSE,CURRENT_TIMESTAMP,
+p,system,Varchar,updated_by,Updated By User/Process,50,,FALSE,,
+p,system,Boolean,active,Is Active Flag,,,FALSE,TRUE,
 // numeric,,,,,,,,,
-p,system,money,Money Data Type,NUMERIC,10,2,FALSE,,
-p,system,int,Integer,INTEGER,,,TRUE,,
-p,system,bigint,Large Integer,BIGINT,,,TRUE,,
-p,system,float,Floating Point Number,FLOAT,,,TRUE,,
-p,system,double,Double Precision,DOUBLE,,,TRUE,,
+p,system,Decimal,money,Money Data Type,10,2,FALSE,,
+p,system,Integer,int,Integer,,,TRUE,,
+p,system,BigInt,bigint,Large Integer,,,TRUE,,
+p,system,Real,real,Floating Point Number with Lower Precision,,,TRUE,,
+p,system,Double,double,Approximate precision floating-point numbers,,,TRUE,,
 // character,,,,,,,,,
-p,system,name,Generic Name Value,TEXT,50,,FALSE,,
-p,system,description,Generic Description,TEXT,,,TRUE,,
-p,system,active,IsActive Flag,BOOLEAN,,,FALSE,TRUE,
-p,system,email,Email,TEXT,255,,,,"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
-p,system,phone,Phone Number,TEXT,20,,,,^\d{3}-\d{3}-\d{4}$
-p,system,state,US States,CHAR,2,,,,"['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']"
-p,system,zip_code,US Zip Codes,TEXT,10,,,,^\d{5}(-\d{4})?$
+p,system,Varchar,name,Generic Name Value,50,,FALSE,,
+p,system,Text,description,Generic Description,,,TRUE,,
+p,system,Boolean,active,IsActive Flag,,,FALSE,TRUE,
+p,system,Varchar,email,Email,255,,TRUE,,"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+p,system,Varchar,phone,Phone Number,20,,TRUE,,^\d{3}-\d{3}-\d{4}$
+p,system,Character,state,US States,2,,TRUE,,"['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']"
+p,system,Varchar,zip_code,US Zip Codes,10,,TRUE,,^\d{5}(-\d{4})?$

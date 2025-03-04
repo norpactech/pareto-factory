@@ -18,7 +18,7 @@ public class ObjectRepository extends BaseRepository {
    */
   public com.norpactech.pareto.entity.Object findByAltKey(UUID idSchema, String name) throws Exception {
     
-    String sql = String.format("select * from %s.object where id_schema = ? and name = ?", getSchema());
+    String sql = String.format("select * from %s.object where id_schema = ? and lower(name) = lower(?)", getSchema());
 
     try {
       return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new com.norpactech.pareto.entity.Object(rs), idSchema, name);
@@ -83,7 +83,7 @@ public class ObjectRepository extends BaseRepository {
     String sql = String.format( 
       "DELETE FROM %s.object " +
        "WHERE id_schema = ? " +
-         "AND name = ?", getSchema());
+         "AND lower(name) = lower(?)", getSchema());
 
     return jdbcTemplate.update(sql, idSchema, name); 
   }

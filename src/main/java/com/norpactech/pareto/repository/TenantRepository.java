@@ -17,7 +17,7 @@ public class TenantRepository extends BaseRepository {
    */
   public Tenant findByAltKey(String name) {
     
-    String sql = String.format("select * from %s.tenant where name = ?", getSchema());
+    String sql = String.format("select * from %s.tenant where lower(name) = lower(?)", getSchema());
 
     try {
       return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Tenant(rs), name);
@@ -77,7 +77,7 @@ public class TenantRepository extends BaseRepository {
     
     String sql = String.format( 
       "DELETE FROM %s.tenant " +
-       "WHERE name = ?", getSchema());
+       "WHERE lower(name) = lower(?)", getSchema());
 
     return jdbcTemplate.update(sql, name); 
   }

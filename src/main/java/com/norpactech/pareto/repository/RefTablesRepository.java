@@ -23,7 +23,7 @@ public class RefTablesRepository extends BaseRepository {
     String sql = String.format("select * from %s.ref_tables " + 
                                  "where id_tenant = ? " + 
                                    "and id_ref_table_type = ? " + 
-                                   "and name = ?", getSchema());
+                                   "and lower(name) = lower(?)", getSchema());
 
     try {
       return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new RefTables(rs), idTenant, idRefTableType, name);
@@ -93,7 +93,7 @@ public class RefTablesRepository extends BaseRepository {
       "DELETE FROM %s.ref_table_type " +
        "WHERE id_tenant = ? " +
          "AND id_ref_table_type = ? " +
-         "AND name = ?", getSchema());
+         "AND lower(name) = lower(?)", getSchema());
 
     return jdbcTemplate.update(sql, idTenant, idRefTableType, name); 
   }

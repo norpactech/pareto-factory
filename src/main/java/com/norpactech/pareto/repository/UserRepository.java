@@ -17,7 +17,7 @@ public class UserRepository extends BaseRepository {
    */
   public User findByAltKey(String username) {
     
-    String sql = String.format("select * from %s.user where username = ?", getSchema());
+    String sql = String.format("select * from %s.user where lower(username) = lower(?)", getSchema());
 
     try {
       return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new User(rs), username);
@@ -77,7 +77,7 @@ public class UserRepository extends BaseRepository {
     
     String sql = String.format( 
       "DELETE FROM %s.user " +
-       "WHERE username = ?", getSchema());
+       "WHERE lower(username) = lower(?)", getSchema());
 
     return jdbcTemplate.update(sql, username); 
   }
