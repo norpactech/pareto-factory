@@ -40,8 +40,6 @@ public class PropertyTypeETL extends BaseETL {
   
   @Autowired
   PropertyTypeRepository propertyTypeRepository;
-
-  final String RT_TABLE_TYPE = "datatype";
   
   public void loadData() throws Exception {
 
@@ -63,19 +61,19 @@ public class PropertyTypeETL extends BaseETL {
               "for property_type: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }
-        RefTableType refTableType = refTableTypeRepository.findByAltKey(tenant.getId(), RT_TABLE_TYPE);
+        RefTableType refTableType = refTableTypeRepository.findByAltKey(tenant.getId(), "data_type");
         if (refTableType == null) {
-          log.error("Reference Table Type <" + RT_TABLE_TYPE + "> not found " +
+          log.error("Reference Table Type <data_type> not found " +
               "for property_type: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }        
-        RefTables refTables = refTablesRepository.findByAltKey(tenant.getId(), refTableType.getId(), csvRecord.get("datatype"));
+        RefTables refTables = refTablesRepository.findByAltKey(refTableType.getId(), csvRecord.get("data_type"));
         if (refTables == null) {
-          log.error("Reference Table Data Type <" + csvRecord.get("datatype") + "> not found " +
+          log.error("Reference Table Data Type <" + csvRecord.get("data_type") + "> not found " +
               "for property_type: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }        
-        PropertyType propertyType = propertyTypeRepository.findByAltKey(tenant.getId(), refTables.getId(), csvRecord.get("name"));
+        PropertyType propertyType = propertyTypeRepository.findByAltKey(refTables.getId(), csvRecord.get("name"));
         String action = csvRecord.get("action").toLowerCase();
 
         // Persist else delete
@@ -107,7 +105,7 @@ public class PropertyTypeETL extends BaseETL {
           persisted++;
         }
         else if (action.startsWith("d") && tenant.getId() != null) {
-          propertyTypeRepository.delete(tenant.getId(), refTables.getId(), csvRecord.get("name"));
+          propertyTypeRepository.delete(refTables.getId(), csvRecord.get("name"));
           deleted++;
         }
         else {

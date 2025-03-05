@@ -1,9 +1,25 @@
 package com.norpactech.pareto.utils;
 
+import java.util.UUID;
+
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 
 public class TextUtils {
 
+  public static UUID toUUID(String source) {
+
+    if (StringUtils.isBlank(source)) {
+      return null;
+    }
+    
+    try {
+      return UUID.fromString(source);
+    } 
+    catch (IllegalArgumentException e) {
+      throw new RuntimeException("Invalid UUID: " + source);
+    }
+  }    
+  
   public static String toString(String source) {
 
     if (StringUtils.isBlank(source)) {

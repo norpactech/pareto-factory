@@ -18,15 +18,31 @@ public class PropertyTypeRepository extends BaseRepository {
    * Find by alternate key
    * @throws Exception 
    */
-  public PropertyType findByAltKey(UUID idTenant, UUID idRtDataType, String name) throws Exception {
+  public PropertyType findByIdTenantAndName(UUID idTenant, String name) throws Exception {
 
     String sql = String.format("select * from %s.property_type " +
         "WHERE id_tenant = ? " +
-        "AND id_rt_datatype = ? " +
         "AND lower(name) = lower(?)", getSchema());
     
     try {
-      return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new PropertyType(rs), idTenant, idRtDataType, name);
+      return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new PropertyType(rs), idTenant, name);
+    } 
+    catch (EmptyResultDataAccessException e) {
+      return null;
+    }    
+  }  
+  /**
+   * Find by alternate key
+   * @throws Exception 
+   */
+  public PropertyType findByAltKey(UUID idRtDataType, String name) throws Exception {
+
+    String sql = String.format("select * from %s.property_type " +
+        "WHERE id_rt_data_type = ? " +
+        "AND lower(name) = lower(?)", getSchema());
+    
+    try {
+      return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new PropertyType(rs), idRtDataType, name);
     } 
     catch (EmptyResultDataAccessException e) {
       return null;
@@ -41,7 +57,7 @@ public class PropertyTypeRepository extends BaseRepository {
         "INSERT INTO %s.property_type " +
             "(" +
             "id_tenant, " + 
-            "id_rt_datatype, " + 
+            "id_rt_data_type, " + 
             "name, " +
             "description, " +
             "length, " +
@@ -97,14 +113,13 @@ public class PropertyTypeRepository extends BaseRepository {
   /**
    * Delete
    */
-  public int delete(UUID idTenant, UUID idRtDataType, String name) throws Exception {
+  public int delete(UUID idRtDataType, String name) throws Exception {
 
     String sql = String.format( 
         "DELETE FROM %s.property_type " +
-            "WHERE id_tenant = ? " +
-            "AND id_rt_datatype = ? " +
+            "WHERE id_rt_data_type = ? " +
             "AND lower(name) = lower(?)", getSchema());
 
-    return jdbcTemplate.update(sql, idTenant, idRtDataType, name); 
+    return jdbcTemplate.update(sql, idRtDataType, name); 
   }
 }

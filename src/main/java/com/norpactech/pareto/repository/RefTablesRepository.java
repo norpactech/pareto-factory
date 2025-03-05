@@ -18,15 +18,14 @@ public class RefTablesRepository extends BaseRepository {
    * Find by alternate key
    * @throws Exception 
    */
-  public RefTables findByAltKey(UUID idTenant, UUID idRefTableType, String name) throws Exception {
+  public RefTables findByAltKey(UUID idRefTableType, String name) throws Exception {
     
     String sql = String.format("select * from %s.ref_tables " + 
-                                 "where id_tenant = ? " + 
-                                   "and id_ref_table_type = ? " + 
+                                 "where id_ref_table_type = ? " + 
                                    "and lower(name) = lower(?)", getSchema());
 
     try {
-      return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new RefTables(rs), idTenant, idRefTableType, name);
+      return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new RefTables(rs), idRefTableType, name);
     } 
     catch (EmptyResultDataAccessException e) {
       return null;
@@ -87,14 +86,13 @@ public class RefTablesRepository extends BaseRepository {
   /**
    * Delete
    */
-  public int delete(UUID idTenant, UUID idRefTableType, String name) throws Exception {
+  public int delete(UUID idRefTableType, String name) throws Exception {
     
     String sql = String.format( 
       "DELETE FROM %s.ref_table_type " +
-       "WHERE id_tenant = ? " +
-         "AND id_ref_table_type = ? " +
+       "WHERE id_ref_table_type = ? " +
          "AND lower(name) = lower(?)", getSchema());
 
-    return jdbcTemplate.update(sql, idTenant, idRefTableType, name); 
+    return jdbcTemplate.update(sql, idRefTableType, name); 
   }
 }

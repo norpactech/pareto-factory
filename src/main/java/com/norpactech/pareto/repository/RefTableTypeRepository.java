@@ -20,7 +20,9 @@ public class RefTableTypeRepository extends BaseRepository {
    */
   public RefTableType findByAltKey(UUID idTenant, String name) throws Exception {
     
-    String sql = String.format("select * from %s.ref_table_type where id_tenant = ? and lower(name) = lower(?)", getSchema());
+    String sql = String.format("SELECT * from %s.ref_table_type " +
+    "WHERE id_tenant = ? " +
+    "AND lower(name) = lower(?)", getSchema());
 
     try {
       return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new RefTableType(rs), idTenant, name);

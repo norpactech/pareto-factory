@@ -1,19 +1,19 @@
 action,tenant,ref_table_type,name,description,value,sequence
-p,system,datatype,ID,Unique Identifier - System Dependent UUID/BigInt Sequence ,ID,1
-p,system,datatype,Character,Fixed-length string,CHAR,2
-p,system,datatype,Varchar,Variable-length string,VARCHAR,3
-p,system,datatype,Text,Large text storage,TEXT,4
-p,system,datatype,Boolean,TRUE or FALSE values,BOOLEAN,5
-p,system,datatype,SmallInt,Small Integer,SMALLINT,6
-p,system,datatype,Integer,Integer,INTEGER,7
-p,system,datatype,BigInt,Big Integer,BIGINT,8
-p,system,datatype,Double,Approximate precision floating-point numbers,DOUBLE,9
-p,system,datatype,Decimal,Exact precision decimal numbers,DECIMAL,10
-p,system,datatype,Real,Floating-point number with lower precision,REAL,11
-p,system,datatype,Date,Stores only date,DATE,12
-p,system,datatype,Time,Stores only time,TIME,13
-p,system,datatype,DateTime,Date and Time value,DATETIME,14
-p,system,datatype,Timestamp,System date and time,TIMESTAMP,15
-p,system,datatype,BLOB,Binary Data,BLOB,16
-p,system,datatype,JSON,JSON-formatted data,JSON,17
+p,system,data_type,ID,Unique Identifier - System Dependent UUID/BigInt Sequence ,ID,1
+p,system,data_type,Character,Fixed-length string,CHAR,2
+p,system,data_type,Varchar,Variable-length string,VARCHAR,3
+p,system,data_type,Text,Large text storage,TEXT,4
+p,system,data_type,Boolean,TRUE or FALSE values,BOOLEAN,5
+p,system,data_type,SmallInt,Small Integer,SMALLINT,6
+p,system,data_type,Integer,Integer,INTEGER,7
+p,system,data_type,BigInt,Big Integer,BIGINT,8
+p,system,data_type,Double,Approximate precision floating-point numbers,DOUBLE,9
+p,system,data_type,Decimal,Exact precision decimal numbers,DECIMAL,10
+p,system,data_type,Real,Floating-point number with lower precision,REAL,11
+p,system,data_type,Date,Stores only date,DATE,12
+p,system,data_type,Time,Stores only time,TIME,13
+p,system,data_type,DateTime,Date and Time value,DATETIME,14
+p,system,data_type,Timestamp,System date and time,TIMESTAMP,15
+p,system,data_type,BLOB,Binary Data,BLOB,16
+p,system,data_type,JSON,JSON-formatted data,JSON,17
 // end datatype,,,,,,

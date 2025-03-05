@@ -1,4 +1,4 @@
-action,tenant,datatype,name,description,length,precision,is_nullable,default_value,validation
+action,tenant,data_type,name,description,length,precision,is_nullable,default_value,validation
 // commons,,,,,,,,,
 p,system,ID,id,Unique Identifier - System Dependent,,,FALSE,GEN_RANDOM_UUID(),
 p,system,Varchar,username,User Name,50,,FALSE,,

@@ -1,4 +1,5 @@
-action,tenant,schema,object,property_type,name,description,validation,length,precision,is_nullable,default_value,sequence
-p,system,pareto,tenant,name,name,,,,,FALSE,,1
-p,system,pareto,tenant,text,description,,,,,TRUE,,2
-p,system,pareto,tenant,text,copyright,,,,,TRUE,,3
+action,tenant,schema,object,data_type,sequence,name,description,length,precision,is_nullable,default_value,validation
+// tenant,,,,,,,,,,,,
+p,system,pareto,tenant,name,1,name,Tenant Name,,,,,
+p,system,pareto,tenant,description,2,description,Tenant Description,,,,,
+p,system,pareto,tenant,name,3,copyright,Entity Copyright,,,,,

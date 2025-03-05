@@ -61,7 +61,7 @@ public class RefTablesETL extends BaseETL {
               "for ref_tables: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }        
-        RefTables refTables = refTablesRepository.findByAltKey(tenant.getId(), refTableType.getId(),csvRecord.get("name"));
+        RefTables refTables = refTablesRepository.findByAltKey(refTableType.getId(),csvRecord.get("name"));
         String action = csvRecord.get("action").toLowerCase();
 
         // Persist else delete
@@ -88,7 +88,7 @@ public class RefTablesETL extends BaseETL {
           persisted++;
         }
         else if (action.startsWith("d") && refTableType != null) {
-          refTablesRepository.delete(tenant.getId(), refTableType.getId(), csvRecord.get("name"));
+          refTablesRepository.delete(refTableType.getId(), csvRecord.get("name"));
           deleted++;
         }
         else {

@@ -24,18 +24,26 @@ class AllEtlTest {
   RefTablesETL refTablesETL;
 
   @Autowired
+  PropertyTypeETL propertyTypeETL;
+
+  @Autowired
   SchemaETL schemaETL;
 
   @Autowired
   ObjectETL objectETL;
 
+  @Autowired
+  PropertyETL propertyETL;
+  
   @Test
   void objectEtlTest() throws Exception  {
 	  tenantETL.loadData();
 	  userETL.loadData();
     refTableTypeETL.loadData();
     refTablesETL.loadData();
+    propertyTypeETL.loadData();
     schemaETL.loadData();
   	objectETL.loadData();
+  	propertyETL.loadData();
   }
 }
