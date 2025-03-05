@@ -18,7 +18,7 @@ public class PropertyTypeRepository extends BaseRepository {
    * Find by alternate key
    * @throws Exception 
    */
-  public PropertyType findByIdTenantAndName(UUID idTenant, String name) throws Exception {
+  public PropertyType findByAltKey(UUID idTenant, String name) throws Exception {
 
     String sql = String.format("select * from %s.property_type " +
         "WHERE id_tenant = ? " +
@@ -35,6 +35,7 @@ public class PropertyTypeRepository extends BaseRepository {
    * Find by alternate key
    * @throws Exception 
    */
+  /*
   public PropertyType findByAltKey(UUID idRtDataType, String name) throws Exception {
 
     String sql = String.format("select * from %s.property_type " +
@@ -48,6 +49,7 @@ public class PropertyTypeRepository extends BaseRepository {
       return null;
     }    
   }
+  */
   /**
    * Insert
    */

@@ -17,6 +17,7 @@ import com.norpactech.pareto.entity.RefTableType;
 import com.norpactech.pareto.entity.Tenant;
 import com.norpactech.pareto.repository.RefTableTypeRepository;
 import com.norpactech.pareto.repository.TenantRepository;
+import com.norpactech.pareto.utils.TextUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,13 +45,13 @@ public class RefTableTypeETL extends BaseETL {
         if (isComment(csvRecord)) {
           continue;
         }
-        Tenant tenant = tenantRepository.findByAltKey(csvRecord.get("tenant"));
+        Tenant tenant = tenantRepository.findByAltKey(TextUtils.toString(csvRecord.get("tenant")));
         if (tenant == null) {
           log.error("Tenant <" + csvRecord.get("tenant") + "> not found " +
               "for ref_table_type: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }
-        RefTableType refTableType = refTableTypeRepository.findByAltKey(tenant.getId(),csvRecord.get("name"));
+        RefTableType refTableType = refTableTypeRepository.findByAltKey(tenant.getId(), TextUtils.toString(csvRecord.get("name")));
         String action = csvRecord.get("action").toLowerCase();
 
         // Persist else delete
@@ -58,30 +59,30 @@ public class RefTableTypeETL extends BaseETL {
           if (refTableType == null) {
             refTableType = new RefTableType();
             refTableType.setIdTenant(tenant.getId());
-            refTableType.setName(csvRecord.get("name"));
-            refTableType.setDescription(csvRecord.get("description"));
+            refTableType.setName(TextUtils.toString(csvRecord.get("name")));
+            refTableType.setDescription(TextUtils.toString(csvRecord.get("description")));
             refTableType.setCreatedBy("etl");
             refTableTypeRepository.insert(refTableType);                    
           }
           else {
-            refTableType.setDescription(csvRecord.get("description"));
+            refTableType.setDescription(TextUtils.toString(csvRecord.get("description")));
             refTableType.setUpdatedBy("etl2");
             refTableTypeRepository.update(refTableType);
           }
           persisted++;
         }
         else if (action.startsWith("d") && refTableType != null) {
-          refTableTypeRepository.delete(tenant.getId(), csvRecord.get("name"));
+          refTableTypeRepository.delete(tenant.getId(), TextUtils.toString(csvRecord.get("name")));
           deleted++;
         }
         else {
-          log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("username"));
+          log.error("Unknown action <{}> for ref_table_type: {}. Skipping...", action, TextUtils.toString(csvRecord.get("name")));
         }
       }
     } 
     catch (DataAccessException e) {
       e.printStackTrace();
     }
-    log.info("Ref Table Type ETL Completed with {} persisted and {} deleted", persisted, deleted );
+    log.info("Reference Table Type ETL Completed with {} persisted and {} deleted", persisted, deleted );
   }
 }

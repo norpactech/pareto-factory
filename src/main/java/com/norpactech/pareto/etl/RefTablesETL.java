@@ -19,6 +19,7 @@ import com.norpactech.pareto.entity.Tenant;
 import com.norpactech.pareto.repository.RefTableTypeRepository;
 import com.norpactech.pareto.repository.RefTablesRepository;
 import com.norpactech.pareto.repository.TenantRepository;
+import com.norpactech.pareto.utils.TextUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,13 +56,13 @@ public class RefTablesETL extends BaseETL {
               "for ref_tables: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }
-        RefTableType refTableType = refTableTypeRepository.findByAltKey(tenant.getId(), csvRecord.get("ref_table_type"));
+        RefTableType refTableType = refTableTypeRepository.findByAltKey(tenant.getId(), TextUtils.toString(csvRecord.get("ref_table_type")));
         if (refTableType == null) {
           log.error("Reference Table Type <" + csvRecord.get("ref_table_type") + "> not found " +
               "for ref_tables: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }        
-        RefTables refTables = refTablesRepository.findByAltKey(refTableType.getId(),csvRecord.get("name"));
+        RefTables refTables = refTablesRepository.findByAltKey(refTableType.getId(), TextUtils.toString(csvRecord.get("name")));
         String action = csvRecord.get("action").toLowerCase();
 
         // Persist else delete
@@ -70,29 +71,28 @@ public class RefTablesETL extends BaseETL {
             refTables = new RefTables();
             refTables.setIdTenant(tenant.getId());
             refTables.setIdRefTableType(refTableType.getId());
-            refTables.setName(csvRecord.get("name"));
-            refTables.setDescription(csvRecord.get("description"));            
-            refTables.setValue(csvRecord.get("value")); 
-            refTables.setSequence(Integer.parseInt(csvRecord.get("sequence")));            
+            refTables.setName(TextUtils.toString(csvRecord.get("name")));
+            refTables.setDescription(TextUtils.toString(csvRecord.get("description")));            
+            refTables.setValue(TextUtils.toString(csvRecord.get("value"))); 
+            refTables.setSequence(TextUtils.toInteger(csvRecord.get("sequence")));            
             refTables.setCreatedBy("etl");
             refTablesRepository.insert(refTables);                    
           }
           else {
-            refTables.setName(csvRecord.get("name"));
-            refTables.setDescription(csvRecord.get("description"));
-            refTables.setValue(csvRecord.get("value"));            
-            refTables.setSequence(Integer.parseInt(csvRecord.get("sequence")));            
+            refTables.setDescription(TextUtils.toString(csvRecord.get("description")));
+            refTables.setValue(TextUtils.toString(csvRecord.get("value")));            
+            refTables.setSequence(TextUtils.toInteger(csvRecord.get("sequence")));            
             refTables.setUpdatedBy("etl2");
             refTablesRepository.update(refTables);
           }
           persisted++;
         }
         else if (action.startsWith("d") && refTableType != null) {
-          refTablesRepository.delete(refTableType.getId(), csvRecord.get("name"));
+          refTablesRepository.delete(refTableType.getId(), TextUtils.toString(csvRecord.get("name")));
           deleted++;
         }
         else {
-          log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("name"));
+          log.error("Unknown action <{}> for ref_tables: {}. Skipping...", action, TextUtils.toString(csvRecord.get("name")));
         }
       }
     } 

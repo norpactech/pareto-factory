@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.norpactech.pareto.entity.User;
 import com.norpactech.pareto.repository.UserRepository;
+import com.norpactech.pareto.utils.TextUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,34 +42,33 @@ public class UserETL extends BaseETL {
         if (isComment(csvRecord)) {
           continue;
         }
-        User user = userRepository.findByAltKey(csvRecord.get("username"));
+        User user = userRepository.findByAltKey(TextUtils.toString(TextUtils.toString(csvRecord.get("username"))));
         String action = csvRecord.get("action").toLowerCase();
 
         // Persist else delete
         if (action.startsWith("p")) {
           if (user == null) {
             user = new User();
-            user.setUsername(csvRecord.get("username"));
-            user.setEmail(csvRecord.get("email"));
-            user.setFullName(csvRecord.get("full_name"));
+            user.setUsername(TextUtils.toString(csvRecord.get("username")));
+            user.setEmail(TextUtils.toString(csvRecord.get("email")));
+            user.setFullName(TextUtils.toString(csvRecord.get("full_name")));
             user.setCreatedBy("etl");
-            user.setUpdatedBy("etl");
             userRepository.insert(user);                    
           }
           else {
-            user.setEmail(csvRecord.get("email"));
-            user.setFullName(csvRecord.get("full_name"));
+            user.setEmail(TextUtils.toString(csvRecord.get("email")));
+            user.setFullName(TextUtils.toString(csvRecord.get("full_name")));
             user.setUpdatedBy("etl");
             userRepository.update(user);
           }
           persisted++;
         }
         else if (action.startsWith("d") && user != null) {
-          userRepository.delete(csvRecord.get("username"));
+          userRepository.delete(TextUtils.toString(csvRecord.get("username")));
           deleted++;
         }
         else {
-          log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("username"));
+          log.error("Unknown action <{}> for user: {}. Skipping...", action, TextUtils.toString(csvRecord.get("username")));
         }
       }
     } 

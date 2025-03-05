@@ -17,6 +17,7 @@ import com.norpactech.pareto.entity.Schema;
 import com.norpactech.pareto.entity.Tenant;
 import com.norpactech.pareto.repository.SchemaRepository;
 import com.norpactech.pareto.repository.TenantRepository;
+import com.norpactech.pareto.utils.TextUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,13 +45,13 @@ public class SchemaETL extends BaseETL {
         if (isComment(csvRecord)) {
           continue;
         }
-        Tenant tenant = tenantRepository.findByAltKey(csvRecord.get("tenant"));
+        Tenant tenant = tenantRepository.findByAltKey(TextUtils.toString(TextUtils.toString(csvRecord.get("tenant"))));
         if (tenant == null) {
           log.error("Tenant <" + csvRecord.get("tenant") + "> not found " +
               "for schema: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }
-        Schema schema = schemaRepository.findByAltKey(tenant.getId(),csvRecord.get("name"));
+        Schema schema = schemaRepository.findByAltKey(tenant.getId(), TextUtils.toString(TextUtils.toString(csvRecord.get("name"))));
         String action = csvRecord.get("action").toLowerCase();
 
         // Persist else delete
@@ -58,24 +59,24 @@ public class SchemaETL extends BaseETL {
           if (schema == null) {
             schema = new Schema();
             schema.setIdTenant(tenant.getId());
-            schema.setName(csvRecord.get("name"));
-            schema.setDescription(csvRecord.get("description"));
+            schema.setName(TextUtils.toString(csvRecord.get("name")));
+            schema.setDescription(TextUtils.toString(csvRecord.get("description")));
             schema.setCreatedBy("etl");
             schemaRepository.insert(schema);                    
           }
           else {
-            schema.setDescription(csvRecord.get("description"));
+            schema.setDescription(TextUtils.toString(csvRecord.get("description")));
             schema.setUpdatedBy("etl2");
             schemaRepository.update(schema);
           }
           persisted++;
         }
         else if (action.startsWith("d") && schema != null) {
-          schemaRepository.delete(tenant.getId(), csvRecord.get("name"));
+          schemaRepository.delete(tenant.getId(), TextUtils.toString(csvRecord.get("name")));
           deleted++;
         }
         else {
-          log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("username"));
+          log.error("Unknown action <{}> for schema: {}. Skipping...", action, TextUtils.toString(csvRecord.get("name")));
         }
       }
     } 

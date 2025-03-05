@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.norpactech.pareto.entity.Tenant;
 import com.norpactech.pareto.repository.TenantRepository;
+import com.norpactech.pareto.utils.TextUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,33 +41,33 @@ public class TenantETL extends BaseETL {
         if (isComment(csvRecord)) {
           continue;
         }
-        Tenant tenant = tenantRepository.findByAltKey(csvRecord.get("name"));
+        Tenant tenant = tenantRepository.findByAltKey(TextUtils.toString(TextUtils.toString(csvRecord.get("name"))));
         String action = csvRecord.get("action").toLowerCase();
 
         // Persist else delete
         if (action.startsWith("p")) {
           if (tenant == null) {
             tenant = new Tenant();
-            tenant.setName(csvRecord.get("name"));
-            tenant.setDescription(csvRecord.get("description"));
-            tenant.setCopyright(csvRecord.get("copyright"));
+            tenant.setName(TextUtils.toString(csvRecord.get("name")));
+            tenant.setDescription(TextUtils.toString(csvRecord.get("description")));
+            tenant.setCopyright(TextUtils.toString(csvRecord.get("copyright")));
             tenant.setCreatedBy("etl");
             tenantRepository.insert(tenant);                    
           }
           else {
-            tenant.setDescription(csvRecord.get("description"));
-            tenant.setCopyright(csvRecord.get("copyright"));
+            tenant.setDescription(TextUtils.toString(csvRecord.get("description")));
+            tenant.setCopyright(TextUtils.toString(csvRecord.get("copyright")));
             tenant.setUpdatedBy("etl");
             tenantRepository.update(tenant);
           }
           persisted++;
         }
         else if (action.startsWith("d") && tenant != null) {
-          tenantRepository.delete(csvRecord.get("name"));
+          tenantRepository.delete(TextUtils.toString(TextUtils.toString(csvRecord.get("name"))));
           deleted++;
         }
        else {
-          log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("username"));
+          log.error("Unknown action <{}> for tenant: {}. Skipping...", action, TextUtils.toString(csvRecord.get("name")));
         }
       }
     } 

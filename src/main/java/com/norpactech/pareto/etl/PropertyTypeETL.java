@@ -29,6 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class PropertyTypeETL extends BaseETL {
 
+  final String RT_DATA_TYPE = "data_type"; // Reference Table 'Data Type'
+
   @Autowired
   TenantRepository tenantRepository;
 
@@ -55,25 +57,25 @@ public class PropertyTypeETL extends BaseETL {
         if (isComment(csvRecord)) {
           continue;
         }
-        Tenant tenant = tenantRepository.findByAltKey(csvRecord.get("tenant"));
+        Tenant tenant = tenantRepository.findByAltKey(TextUtils.toString(csvRecord.get("tenant")));
         if (tenant == null) {
           log.error("Tenant <" + csvRecord.get("tenant") + "> not found " +
               "for property_type: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }
-        RefTableType refTableType = refTableTypeRepository.findByAltKey(tenant.getId(), "data_type");
+        RefTableType refTableType = refTableTypeRepository.findByAltKey(tenant.getId(), RT_DATA_TYPE);
         if (refTableType == null) {
           log.error("Reference Table Type <data_type> not found " +
               "for property_type: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }        
-        RefTables refTables = refTablesRepository.findByAltKey(refTableType.getId(), csvRecord.get("data_type"));
+        RefTables refTables = refTablesRepository.findByAltKey(refTableType.getId(), TextUtils.toString(csvRecord.get("data_type")));
         if (refTables == null) {
           log.error("Reference Table Data Type <" + csvRecord.get("data_type") + "> not found " +
               "for property_type: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }        
-        PropertyType propertyType = propertyTypeRepository.findByAltKey(refTables.getId(), csvRecord.get("name"));
+        PropertyType propertyType = propertyTypeRepository.findByAltKey(refTables.getId(), TextUtils.toString(csvRecord.get("name")));
         String action = csvRecord.get("action").toLowerCase();
 
         // Persist else delete
@@ -105,11 +107,11 @@ public class PropertyTypeETL extends BaseETL {
           persisted++;
         }
         else if (action.startsWith("d") && tenant.getId() != null) {
-          propertyTypeRepository.delete(refTables.getId(), csvRecord.get("name"));
+          propertyTypeRepository.delete(refTables.getId(), TextUtils.toString(csvRecord.get("name")));
           deleted++;
         }
         else {
-          log.error("Unknown action <{}> for property_type: {}. Skipping...", action, csvRecord.get("name"));
+          log.error("Unknown action <{}> for property_type: {}. Skipping...", action, TextUtils.toString(csvRecord.get("name")));
         }
       }
     } 

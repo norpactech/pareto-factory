@@ -57,6 +57,8 @@ public class PropertyETL extends BaseETL {
 
   public void loadData() throws Exception {
 
+    final String RT_DATA_TYPE = "data_type"; // Reference Table 'Data Type'
+    
     ClassPathResource resource = new ClassPathResource("etl/Property.csv");
     Path path = Paths.get(resource.getURI());
 
@@ -69,19 +71,19 @@ public class PropertyETL extends BaseETL {
         if (isComment(csvRecord)) {
           continue;
         }
-        Tenant tenant = tenantRepository.findByAltKey(csvRecord.get("tenant"));
+        Tenant tenant = tenantRepository.findByAltKey(TextUtils.toString(csvRecord.get("tenant")));
         if (tenant == null) {
           log.error("Tenant <" + csvRecord.get("tenant") + "> not found " +
               "for property: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }
-        Schema schema = schemaRepository.findByAltKey(tenant.getId(), csvRecord.get("schema"));
+        Schema schema = schemaRepository.findByAltKey(tenant.getId(), TextUtils.toString(csvRecord.get("schema")));
         if (schema == null) {
           log.error("Schama <" + csvRecord.get("schema") + "> not found " +
               "for property: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }        
-        com.norpactech.pareto.entity.Object object = objectRepository.findByAltKey(schema.getId(),csvRecord.get("object"));
+        com.norpactech.pareto.entity.Object object = objectRepository.findByAltKey(schema.getId(), TextUtils.toString(csvRecord.get("object")));
         if (object == null) {
           log.error("Object <" + csvRecord.get("name") + "> not found " + 
                "for property: " + csvRecord.get("name") + ". Skipping...");
@@ -93,7 +95,7 @@ public class PropertyETL extends BaseETL {
 
         if (action.startsWith("p")) { 
           // Get the default properties
-          propertyType = propertyTypeRepository.findByIdTenantAndName(tenant.getId(), csvRecord.get("data_type"));
+          propertyType = propertyTypeRepository.findByAltKey(tenant.getId(), TextUtils.toString(csvRecord.get("data_type")));
           if (propertyType != null) {
             defaultProperties = new Property();
             defaultProperties.setDataType(propertyType.getName());
@@ -105,9 +107,9 @@ public class PropertyETL extends BaseETL {
           }
           else {
             // Check if the data type is valid
-            RefTableType refTableType = refTableTypeRepository.findByAltKey(tenant.getId(), "data_type");
+            RefTableType refTableType = refTableTypeRepository.findByAltKey(tenant.getId(), RT_DATA_TYPE);
             if (refTableType != null) {
-              RefTables refTables = refTablesRepository.findByAltKey(refTableType.getId(), csvRecord.get("data_type"));
+              RefTables refTables = refTablesRepository.findByAltKey(refTableType.getId(), TextUtils.toString(csvRecord.get("data_type")));
               
               if (refTables == null) {
                 log.error("Reference Table <" + csvRecord.get("property_type") + "> not found " +
@@ -117,7 +119,7 @@ public class PropertyETL extends BaseETL {
             }
           }
         }
-        Property property = propertyRepository.findByAltKey(object.getId(), csvRecord.get("name"));
+        Property property = propertyRepository.findByAltKey(object.getId(), TextUtils.toString(csvRecord.get("name")));
         
         // Persist else delete
         if (action.startsWith("p")) {
@@ -188,11 +190,11 @@ public class PropertyETL extends BaseETL {
           persisted++;
         }
         else if (action.startsWith("d") && tenant.getId() != null) {
-          propertyRepository.delete(object.getId(), csvRecord.get("name"));
+          propertyRepository.delete(object.getId(), TextUtils.toString(csvRecord.get("name")));
           deleted++;
         }
         else {
-          log.error("Unknown action <{}> for property: {}. Skipping...", action, csvRecord.get("name"));
+          log.error("Unknown action <{}> for property: {}. Skipping...", action, TextUtils.toString(csvRecord.get("name")));
         }
       }
     } 

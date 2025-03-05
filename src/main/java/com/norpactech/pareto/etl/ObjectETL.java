@@ -18,6 +18,7 @@ import com.norpactech.pareto.entity.Tenant;
 import com.norpactech.pareto.repository.ObjectRepository;
 import com.norpactech.pareto.repository.SchemaRepository;
 import com.norpactech.pareto.repository.TenantRepository;
+import com.norpactech.pareto.utils.TextUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,19 +49,19 @@ public class ObjectETL extends BaseETL {
         if (isComment(csvRecord)) {
           continue;
         }
-        Tenant tenant = tenantRepository.findByAltKey(csvRecord.get("tenant"));
+        Tenant tenant = tenantRepository.findByAltKey(TextUtils.toString(csvRecord.get("tenant")));
         if (tenant == null) {
           log.error("Tenant <" + csvRecord.get("tenant") + "> not found " +
-              "for schema: " + csvRecord.get("name") + ". Skipping...");
+              "for object: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }
-        Schema schema = schemaRepository.findByAltKey(tenant.getId(), csvRecord.get("schema"));
+        Schema schema = schemaRepository.findByAltKey(tenant.getId(), TextUtils.toString(csvRecord.get("schema")));
         if (schema == null) {
           log.error("Schama <" + csvRecord.get("schema") + "> not found " +
               "for object: " + csvRecord.get("name") + ". Skipping...");
           continue;
         }        
-        com.norpactech.pareto.entity.Object object = objectRepository.findByAltKey(schema.getId(),csvRecord.get("name"));
+        com.norpactech.pareto.entity.Object object = objectRepository.findByAltKey(schema.getId(), TextUtils.toString(csvRecord.get("name")));
         String action = csvRecord.get("action").toLowerCase();
 
         // Persist else delete
@@ -68,28 +69,28 @@ public class ObjectETL extends BaseETL {
           if (object == null) {
             object = new com.norpactech.pareto.entity.Object();
             object.setIdSchema(schema.getId());
-            object.setName(csvRecord.get("name"));
-            object.setDescription(csvRecord.get("description"));            
-            object.setHasIdentifier(csvRecord.get("has_identifier").equals("TRUE") ? true : false);
-            object.setHasAudit(csvRecord.get("has_audit").equals("TRUE") ? true : false);
+            object.setName(TextUtils.toString(csvRecord.get("name")));
+            object.setDescription(TextUtils.toString(csvRecord.get("description")));            
+            object.setHasIdentifier(TextUtils.toBoolean(csvRecord.get("has_identifier")));
+            object.setHasAudit(TextUtils.toBoolean(csvRecord.get("has_audit")));
             object.setCreatedBy("etl");
             objectRepository.insert(object);                    
           }
           else {
-            object.setDescription(csvRecord.get("description"));
-            object.setHasIdentifier(csvRecord.get("has_identifier").equals("TRUE") ? true : false);
-            object.setHasAudit(csvRecord.get("has_audit").equals("TRUE") ? true : false);
+            object.setDescription(TextUtils.toString(csvRecord.get("description")));
+            object.setHasIdentifier(TextUtils.toBoolean(csvRecord.get("has_identifier")));
+            object.setHasAudit(TextUtils.toBoolean(csvRecord.get("has_audit")));
             object.setUpdatedBy("etl2");
             objectRepository.update(object);
           }
           persisted++;
         }
         else if (action.startsWith("d") && schema != null) {
-          objectRepository.delete(schema.getId(), csvRecord.get("name"));
+          objectRepository.delete(schema.getId(), TextUtils.toString(csvRecord.get("name")));
           deleted++;
         }
         else {
-          log.error("Unknown action <{}> for user: {}. Skipping...", action, csvRecord.get("name"));
+          log.error("Unknown action <{}> for object: {}. Skipping...", action, TextUtils.toString(csvRecord.get("name")));
         }
       }
     } 

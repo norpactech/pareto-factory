@@ -68,7 +68,6 @@ public class RefTablesRepository extends BaseRepository {
     
     String sql = String.format( 
       "UPDATE %s.ref_tables set " +
-        "name = ?, " +
         "description = ?, " +
         "value = ?, " +
         "sequence = ?, " +
@@ -76,7 +75,6 @@ public class RefTablesRepository extends BaseRepository {
       "WHERE id = ?", getSchema());
 
     return jdbcTemplate.update(sql, 
-      refTables.getName(), 
       refTables.getDescription(), 
       refTables.getValue(), 
       refTables.getSequence(), 
